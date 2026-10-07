@@ -8,39 +8,40 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Serif+TC:wght@300;400;600;900&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Serif+TC:wght@300;400;600;900&family=Plus+Jakarta+Sans:wght@300;400;600;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
+      /* 全域動態電影色度引擎變數 */
+      --current-accent: #e2e8f0;
+      --current-glow: rgba(226, 232, 240, 0.45);
+      --current-bg: #03070c;
     }
 
     body {
       margin: 0;
       padding: 0;
-      background-color: #050208;
+      background-color: var(--current-bg);
       color: #ffffff;
       font-family: 'Noto Serif TC', serif;
       overflow: hidden;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
       -webkit-user-select: none;
+      transition: background-color 1s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
-    .font-sans-modern {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-    }
+    .font-sans-modern { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
+    .font-cinzel { font-family: 'Cinzel', serif; }
+    .font-mono-code { font-family: 'Space Mono', monospace; }
 
-    .font-cinzel {
-      font-family: 'Cinzel', serif;
-    }
-
-    /* 立體電影無邊框文字投影 (徹底去卡片化，純字立體浮印) */
+    /* 電影級純文字立體浮水印投影 (徹底去卡片化) */
     .watermark-text {
       text-shadow: 
         0 2px 10px rgba(0, 0, 0, 0.95),
-        0 4px 22px rgba(0, 0, 0, 0.9),
+        0 4px 24px rgba(0, 0, 0, 0.9),
         0 0 35px rgba(0, 0, 0, 0.85);
     }
 
@@ -54,6 +55,43 @@
     .vertical-text-layout {
       writing-mode: vertical-rl;
       text-orientation: mixed;
+    }
+
+    /* 漫威經典片頭品牌字標容器 */
+    .marvel-brand-card {
+      position: relative;
+      background: #020b0e;
+      border: 3px solid #ffffff;
+      box-shadow: 
+        0 0 30px rgba(10, 186, 181, 0.4),
+        0 15px 45px rgba(0, 0, 0, 0.9),
+        inset 0 0 25px rgba(0, 0, 0, 0.8);
+    }
+
+    /* 漫威字母剪影內部動態透光翻頁 */
+    .marvel-giant-text {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 900;
+      letter-spacing: -0.06em;
+      background-size: cover;
+      background-position: center;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.9));
+      transition: background-image 0.04s linear;
+    }
+
+    /* 膠卷掃描線與微微顆粒 */
+    .marvel-scanlines {
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 2px,
+        rgba(0, 0, 0, 0.35) 3px,
+        rgba(0, 0, 0, 0.35) 4px
+      );
     }
 
     /* 電影級舞台過渡動態 */
@@ -96,10 +134,10 @@
 
     /* 燭火真實呼吸動態 */
     @keyframes flameFlicker {
-      0%, 100% { transform: scale(1) rotate(-1deg); filter: drop-shadow(0 0 16px #f59e0b); }
-      30% { transform: scale(1.08, 0.95) rotate(2deg); filter: drop-shadow(0 0 24px #fbbf24); }
-      60% { transform: scale(0.96, 1.05) rotate(-2deg); filter: drop-shadow(0 0 20px #f59e0b); }
-      85% { transform: scale(1.04, 0.98) rotate(1deg); filter: drop-shadow(0 0 26px #fef08a); }
+      0%, 100% { transform: scale(1) rotate(-1deg); filter: drop-shadow(0 0 16px #fbbf24); }
+      30% { transform: scale(1.08, 0.95) rotate(2deg); filter: drop-shadow(0 0 24px #f59e0b); }
+      60% { transform: scale(0.96, 1.05) rotate(-2deg); filter: drop-shadow(0 0 20px #d97706); }
+      85% { transform: scale(1.04, 0.98) rotate(1deg); filter: drop-shadow(0 0 26px #fde68a); }
     }
 
     .flame-on {
@@ -136,7 +174,7 @@
       padding-bottom: max(var(--safe-bottom), 16px);
     }
 
-    /* 方案 B：橫跨螢幕邊緣 · 來回平滑鐘擺呼吸捲動膠卷 (Ping-Pong Reel) */
+    /* 來回平滑鐘擺呼吸捲動膠卷 (Ping-Pong Reel) */
     .panoramic-reel-wrapper {
       position: relative;
       width: 100vw;
@@ -178,12 +216,12 @@
 
     .film-frame-card {
       position: relative;
-      width: 82px;
-      height: 112px;
+      width: 84px;
+      height: 114px;
       border-radius: 4px;
-      background: #08050a;
-      border: 1px solid rgba(251, 191, 36, 0.65);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8), 0 0 10px rgba(251, 191, 36, 0.2);
+      background: #02090c;
+      border: 1px solid rgba(10, 186, 181, 0.55);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8), 0 0 12px rgba(10, 186, 181, 0.25);
       flex-shrink: 0;
       display: flex;
       flex-direction: column;
@@ -191,7 +229,7 @@
       padding: 3px;
     }
 
-    /* 方案 A：導演暗房工作台 · 雙軌錯落光影印樣 (The Director's Dual Contact Reel) */
+    /* 導演暗房工作台 · 雙軌錯落光影印樣 */
     .contact-reel-container {
       width: 100vw;
       margin-left: -1rem;
@@ -203,7 +241,7 @@
       touch-action: pan-x;
       mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
       -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
-      padding: 4px 0;
+      padding: 3px 0;
     }
 
     .contact-reel-container::-webkit-scrollbar {
@@ -246,13 +284,12 @@
       100% { transform: translate3d(0, 0, 0); }
     }
 
-    /* 35mm 寬銀幕膠卷底片暗房規格框 */
     .contact-film-card {
       position: relative;
       width: 124px;
       height: 94px;
-      background: #09060c;
-      border: 1px solid rgba(251, 191, 36, 0.45);
+      background: #02090c;
+      border: 1px solid rgba(10, 186, 181, 0.45);
       border-radius: 4px;
       flex-shrink: 0;
       display: flex;
@@ -263,7 +300,7 @@
     }
 
     @keyframes darkroomEnter {
-      0% { opacity: 0; transform: scale(0.94); filter: blur(4px); }
+      0% { opacity: 0; transform: scale(0.95); filter: blur(4px); }
       100% { opacity: 1; transform: scale(1); filter: blur(0px); }
     }
 
@@ -280,63 +317,109 @@
     .beacon-pulse {
       animation: beaconGlow 1.8s ease-in-out infinite;
     }
+
+    /* 動態環境呼吸光暈 (換幕時平滑轉色) */
+    .ambient-dynamic-halo {
+      background: radial-gradient(circle at center, var(--current-glow) 0%, transparent 75%);
+      transition: background 1s ease-in-out;
+    }
   </style>
 </head>
 
-<body class="bg-black text-white w-screen h-[100dvh] overflow-hidden select-none">
+<body class="w-screen h-[100dvh] overflow-hidden select-none">
 
-  <!-- 音訊引擎：優先加載本地 bgm.mp3，備用線上浪漫鋼琴曲 -->
+  <!-- 音訊引擎：優先加載本地 bgm.mp3，備用線上鋼琴曲 -->
   <audio id="bgAudio" loop playsinline preload="auto">
     <source src="./bgm.mp3" type="audio/mpeg">
     <source src="https://cdn.pixabay.com/download/audio/2022/05/16/audio_db6591201e.mp3?filename=romantic-piano-112199.mp3" type="audio/mpeg">
   </audio>
 
+  <!-- 全螢幕動態環境光暈層 (換幕時全螢幕色溫同步轉變) -->
+  <div id="dynamicAmbientLayer" class="absolute inset-0 w-full h-full pointer-events-none z-[5] ambient-dynamic-halo"></div>
+
   <!-- 全螢幕背景粒子畫布 -->
   <canvas id="starsCanvas" class="absolute inset-0 w-full h-full pointer-events-none z-10"></canvas>
   <canvas id="fireworksCanvas" class="absolute inset-0 w-full h-full pointer-events-none z-40"></canvas>
 
-  <!-- 電影暖白高光轉場光暈 (吹熄火苗時爆發) -->
-  <div id="bloomFlash" class="fixed inset-0 bg-white pointer-events-none z-[80] opacity-0 transition-opacity duration-700"></div>
+  <!-- 電影高光轉場光暈 (吹熄火苗時爆發) -->
+  <div id="bloomFlash" class="fixed inset-0 bg-[#f0fdfa] pointer-events-none z-[80] opacity-0 transition-opacity duration-700"></div>
 
-  <!-- 開場解鎖布幕 (繞過 iOS 音訊播放限制) -->
-  <div id="introCurtain" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/95 px-6 text-center transition-opacity duration-1000">
-    <div class="w-16 h-16 rounded-full border border-amber-300/40 flex items-center justify-center mb-6 animate-pulse shadow-[0_0_30px_rgba(245,158,11,0.25)]">
-      <span class="text-2xl">✨</span>
-    </div>
-
-    <div class="text-amber-300/80 font-sans-modern text-xs tracking-[0.3em] uppercase mb-2">
-      A Cinematic Love Story
-    </div>
+  <!-- 開場解鎖布幕：漫威影業經典時光翻頁大片開場 (Marvel Studios Flipbook Overture) -->
+  <div id="introCurtain" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#010609] px-4 text-center transition-opacity duration-1000 overflow-hidden">
     
-    <h1 class="text-2xl md:text-3xl font-black text-white tracking-widest mb-3">
-      佳寶寶 · 生日映畫
-    </h1>
+    <!-- 2.35:1 經典電影寬銀幕上下黑邊遮罩 (Cinematic Letterbox) -->
+    <div class="absolute top-0 inset-x-0 h-11 md:h-16 bg-black pointer-events-none z-20 border-b border-teal-500/15"></div>
+    <div class="absolute bottom-0 inset-x-0 h-11 md:h-16 bg-black pointer-events-none z-20 border-t border-teal-500/15"></div>
+    
+    <!-- 橫貫銀幕中心的冷青微光變形光斑線條 (Anamorphic Line) -->
+    <div class="absolute w-full h-[1px] bg-gradient-to-r from-transparent via-teal-400/35 to-transparent pointer-events-none z-10"></div>
 
-    <p class="text-xs text-rose-200/80 leading-relaxed max-w-xs mb-8">
-      我們在一起後的第一個生日<br>
-      翻閱 2025.12.22 至今的每一步足跡 🎞️<br>
-      <span class="text-[11px] text-amber-200/70 block mt-2">（若使用 iPhone，請開啟手機聲音以獲取完整體驗）</span>
-    </p>
+    <!-- 漫威影業大片核心展示卡 -->
+    <div class="relative z-20 flex flex-col items-center w-full max-w-sm">
+      
+      <!-- 頂部出品人標記 -->
+      <div class="flex items-center gap-2 mb-3.5 opacity-90">
+        <span class="w-6 h-[1px] bg-teal-400/60"></span>
+        <span class="text-[9px] font-mono tracking-[0.45em] text-teal-300 uppercase font-semibold">EXCLUSIVE PRODUCTION</span>
+        <span class="w-6 h-[1px] bg-teal-400/60"></span>
+      </div>
 
-    <button id="startCinemaBtn" class="px-8 py-3.5 rounded-full bg-gradient-to-r from-rose-500 to-amber-500 text-white font-semibold text-sm tracking-wider shadow-[0_0_35px_rgba(244,63,94,0.45)] active:scale-95 transition-all">
-      放映我們的故事
-    </button>
+      <!-- 漫威經典巨型品牌字標框體 (MARVEL BOX) -->
+      <div class="marvel-brand-card relative rounded-[2px] overflow-hidden px-6 py-3 mb-2 w-[86vw] max-w-[310px]">
+        
+        <!-- 底層極速抽幀照片背景 (微模糊營造整體動感) -->
+        <div id="marvelFlipbookTrack" class="absolute inset-0 w-full h-full bg-cover bg-center filter brightness-90 contrast-125 opacity-35 pointer-events-none"></div>
+        
+        <!-- 復古掃描線與顆粒質感 -->
+        <div class="marvel-scanlines absolute inset-0 pointer-events-none"></div>
+
+        <!-- 漫威核心字母：JIA (字母內部以超高幀率狂飆抽幀翻頁) -->
+        <div class="relative z-10 flex items-center justify-center">
+          <h1 id="marvelGiantTitle" class="marvel-giant-text text-6xl md:text-7xl uppercase leading-none select-none py-1">
+            JIA
+          </h1>
+        </div>
+      </div>
+
+      <!-- 漫威下層標誌性紅/青金屬銘牌條：STUDIOS -->
+      <div class="flex items-center justify-between w-[86vw] max-w-[310px] px-1 mb-4">
+        <div class="h-[1.5px] flex-1 bg-white/80"></div>
+        <div class="px-3.5 py-0.5 text-[10px] md:text-[11px] font-black font-sans-modern tracking-[0.45em] text-white uppercase bg-teal-600/90 rounded-[2px] shadow-[0_0_15px_#0abab5]">
+          STUDIOS
+        </div>
+        <div class="h-[1.5px] flex-1 bg-white/80"></div>
+      </div>
+
+      <!-- 漫威官方副標題與時間線 -->
+      <div class="text-[10px] font-mono tracking-[0.3em] text-teal-200/90 uppercase mb-1.5 watermark-subtle">
+        A PRIVATE SCREENING FOR MY LOVE
+      </div>
+      <div class="text-[9px] font-mono tracking-[0.25em] text-slate-400 mb-8 watermark-subtle">
+        SINCE 2025.12.22 · 17 CHAPTERS
+      </div>
+
+      <!-- 漫威院線首映按鈕 (Premier Pass) -->
+      <button id="startCinemaBtn" class="group relative px-9 py-3 rounded-sm bg-gradient-to-r from-teal-400 via-teal-300 to-cyan-300 text-slate-950 font-sans-modern text-xs tracking-[0.3em] font-black shadow-[0_0_35px_rgba(10,186,181,0.55)] hover:shadow-[0_0_45px_rgba(10,186,181,0.8)] active:scale-95 transition-all flex items-center gap-2.5 cursor-pointer border border-white/70">
+        <span class="w-2 h-2 bg-slate-950 transform rotate-45 group-hover:rotate-90 transition-transform"></span>
+        <span class="uppercase">首映入座 · PREMIERE</span>
+      </button>
+    </div>
   </div>
 
-  <!-- 頂部進度條與電影導覽列 -->
+  <!-- 頂部進度條與電影導覽列 (顏色隨每幕動態過渡) -->
   <div class="fixed top-0 inset-x-0 z-30 flex flex-col safe-top-inset px-4 pointer-events-none">
     <!-- 17 段分段進度條 -->
     <div id="timelineProgressTrack" class="flex gap-1 w-full pt-2"></div>
 
     <div class="flex items-center justify-between mt-2.5 px-0.5">
-      <div id="sceneBadge" class="text-[11px] font-sans-modern tracking-widest text-white/80 font-medium watermark-subtle">
-        第 1 幕 / 共 17 幕
+      <div id="sceneBadge" class="text-[11px] font-sans-modern tracking-widest font-medium watermark-subtle transition-colors duration-700">
+        SCENE 01 / 17
       </div>
 
-      <!-- 音樂開關按鈕 (點擊切換播放/暫停) -->
-      <button id="musicToggleBtn" class="pointer-events-auto flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/15 text-white/90 active:scale-95 transition-transform">
-        <div id="vinylIcon" class="w-3.5 h-3.5 rounded-full border border-amber-300/60 flex items-center justify-center vinyl-spinning">
-          <div class="w-1 h-1 rounded-full bg-amber-300"></div>
+      <!-- 音樂開關按鈕 -->
+      <button id="musicToggleBtn" class="pointer-events-auto flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900/60 backdrop-blur-md border border-white/20 text-white active:scale-95 transition-all">
+        <div id="vinylIcon" class="w-3.5 h-3.5 rounded-full border border-teal-300/70 flex items-center justify-center vinyl-spinning">
+          <div id="vinylCenter" class="w-1 h-1 rounded-full bg-teal-300"></div>
         </div>
         <span class="text-[10px] font-sans-modern tracking-wider">BGM</span>
       </button>
@@ -356,7 +439,11 @@
         {
           id: 1,
           photo: './photo1.jpg',
-          layout: 'wide-screen-bottom-left',
+          styleKey: 'glacier-silver',
+          themeName: '冰川冷灰白 · Glacier Silver',
+          accent: '#e2e8f0',
+          glow: 'rgba(226, 232, 240, 0.45)',
+          bg: '#03070c',
           tag: 'CHAPTER 01 · 旅途啟程',
           title: '只要跟妳一起，到哪都是冒險',
           letter: '拖著行李箱出發的這一刻，妳臉上的笑容比晨光還要耀眼。只要身邊是妳，哪怕只是最平凡的小巷，都是最棒的旅程。'
@@ -364,7 +451,11 @@
         {
           id: 2,
           photo: './photo2.jpg',
-          layout: 'japanese-top-right',
+          styleKey: 'fuji-mint',
+          themeName: '富士冷薄荷 · Fuji Mint',
+          accent: '#34d399',
+          glow: 'rgba(52, 211, 153, 0.45)',
+          bg: '#02120b',
           tag: 'CHAPTER 02 · 俏皮笑顏',
           title: '最融化人心的可愛小動作',
           letter: '最喜歡妳戳著臉頰笑得這麼可愛的樣子，每一個專屬於妳的鬼臉，都讓我的心徹底融化。'
@@ -372,7 +463,11 @@
         {
           id: 3,
           photo: './photo3.jpg',
-          layout: 'sky-center-title',
+          styleKey: 'aegean-ultramarine',
+          themeName: '愛琴海群青 · Aegean Deep',
+          accent: '#38bdf8',
+          glow: 'rgba(56, 189, 248, 0.45)',
+          bg: '#02111d',
           tag: 'CHAPTER 03 · 山海依偎',
           title: '俯瞰整座山海，眼裡全都是妳',
           letter: '遠方彩色的房子與開闊海灣再美，都不及站在我身邊、笑著轉過頭來看我的妳。'
@@ -380,7 +475,11 @@
         {
           id: 4,
           photo: './photo4.jpg',
-          layout: 'wong-kar-wai-vertical',
+          styleKey: 'moody-jade',
+          themeName: '王家衛墨翡翠 · Moody Jade',
+          accent: '#10b981',
+          glow: 'rgba(16, 185, 129, 0.45)',
+          bg: '#01130b',
           tag: 'CHAPTER 04 · 日常依靠',
           title: '肩頭上的溫度，最踏實的安心',
           letter: '車廂輕晃的節奏裡，妳把頭輕輕靠在我肩上的那一刻，所有的疲憊都化作最踏實的幸福。'
@@ -388,16 +487,24 @@
         {
           id: 5,
           photo: './photo5.jpg',
-          layout: 'french-stamp-card',
+          styleKey: 'winter-monochrome',
+          themeName: '冬夜銀鹽黑白 · Silver Noir',
+          accent: '#f8fafc',
+          glow: 'rgba(248, 250, 252, 0.45)',
+          bg: '#07090b',
           tag: 'WALKING TOGETHER · SINCE 2025.12.22',
-          dateTag: 'OUR JOURNEY // SINCE 2025.12.22',
+          dateTag: 'ARCHIVE · 2025.12.22',
           title: '走進彼此生活後的每一個冬天',
           letter: '自從2025年末我們牽起彼此的手，每一個走過的小巷、吹過的晚風，都因為身邊緊緊靠著的妳，有了最幸福的意義。'
         },
         {
           id: 6,
           photo: './photo6.jpg',
-          layout: 'reflection-subtitles-center',
+          styleKey: 'midnight-prussian',
+          themeName: '幽藍深鈷 · Midnight Prussian',
+          accent: '#60a5fa',
+          glow: 'rgba(96, 165, 250, 0.45)',
+          bg: '#020b18',
           tag: 'CHAPTER 06 · 相擁溫存',
           title: '謝謝妳毫無保留的溫柔與包容',
           letter: '在落羽松與湖水倒影前緊緊擁抱著妳。謝謝妳走進我的生活，用最大的愛與包容做我最安心的避風港。'
@@ -405,7 +512,11 @@
         {
           id: 7,
           photo: './photo7.jpg',
-          layout: 'cherry-blossom-vertical',
+          styleKey: 'frosted-sakura-violet',
+          themeName: '冰霜冷櫻紫 · Sakura Violet',
+          accent: '#f472b6',
+          glow: 'rgba(244, 114, 182, 0.45)',
+          bg: '#130514',
           tag: 'CHAPTER 07 · 繁花盛放',
           title: '花開萬千，不及妳眼裡星光',
           letter: '盛開的花樹再燦爛，也沒有妳從背後摟著我笑時好看。妳的笑，是我看過最美的春天。'
@@ -413,7 +524,11 @@
         {
           id: 8,
           photo: './photo8.jpg',
-          layout: 'diner-sticky-note',
+          styleKey: 'industrial-steel',
+          themeName: '深夜食堂鋼青 · Industrial Slate',
+          accent: '#94a3b8',
+          glow: 'rgba(148, 163, 184, 0.45)',
+          bg: '#050b12',
           tag: 'CHAPTER 08 · 朝夕滋味',
           title: '平淡一餐，也是一輩子的滋味',
           letter: '並肩坐在一起，吃著熱騰騰的美食，聊著今天瑣碎的小事。有妳在的日子，生活就是最好的味道。'
@@ -421,7 +536,11 @@
         {
           id: 9,
           photo: './photo9.jpg',
-          layout: 'lantern-street-vertical',
+          styleKey: 'cyber-neon-teal',
+          themeName: '雨夜賽博冷青 · Cyber Teal',
+          accent: '#2dd4bf',
+          glow: 'rgba(45, 212, 191, 0.45)',
+          bg: '#011417',
           tag: 'CHAPTER 09 · 人間煙火',
           title: '燈火闌珊處，世界唯妳璀璨',
           letter: '在熱鬧的紅燈籠與人潮裡緊緊牽著妳的手。世界再喧囂，只要握著妳，心裡就無比篤定。'
@@ -429,15 +548,23 @@
         {
           id: 10,
           photo: './photo10.jpg',
-          layout: 'mushroom-storybook-left',
-          tag: 'CHAPTER 10 · 童趣爛漫',
+          styleKey: 'moonlit-graphite',
+          themeName: '炭黑月光灰 · Moonlit Graphite',
+          accent: '#cbd5e1',
+          glow: 'rgba(203, 213, 225, 0.45)',
+          bg: '#060a0f',
+          tag: 'CHAPTER 10 · 同行心動',
           title: '在公司共識一年，到彼此的全世界',
           letter: '在同公司共識一年的默契與心動，讓我們牽手走到了一起。命運給了我最珍貴的禮物，就是身邊可愛的妳。'
         },
         {
           id: 11,
           photo: './photo11.jpg',
-          layout: 'road-trip-hud',
+          styleKey: 'aurora-aero-cyan',
+          themeName: '極光天青藍 · Aurora Aero',
+          accent: '#06b6d4',
+          glow: 'rgba(6, 182, 212, 0.45)',
+          bg: '#01151a',
           tag: 'CHAPTER 11 · 並肩兜風',
           title: '專屬副駕駛座，奔赴所有美好',
           letter: '最喜歡妳坐在副駕駛座開心的模樣。只要身旁是妳，車開往哪裡，都是最棒的風景。'
@@ -445,7 +572,11 @@
         {
           id: 12,
           photo: './photo12.jpg',
-          layout: 'playful-badge-top-left',
+          styleKey: 'electric-ice-lime',
+          themeName: '冰晶青檸綠 · Electric Lime',
+          accent: '#4ade80',
+          glow: 'rgba(74, 222, 128, 0.45)',
+          bg: '#021408',
           tag: 'CHAPTER 12 · 默契萌趣',
           title: '在妳身邊，做最自在快樂的小孩',
           letter: '穿著同款情侶裝、抱著搞怪比耶的玩偶。在妳面前我永遠不必偽裝，只管放肆地大笑。'
@@ -453,7 +584,11 @@
         {
           id: 13,
           photo: './photo13.jpg',
-          layout: 'afternoon-center-light',
+          styleKey: 'cold-vanilla-slate',
+          themeName: '冷萃香草灰 · Cold Vanilla',
+          accent: '#e2e8f0',
+          glow: 'rgba(226, 232, 240, 0.45)',
+          bg: '#0c0f14',
           tag: 'CHAPTER 13 · 甜蜜淘氣',
           title: '陪妳吃甜點，陪妳做幼稚鬼臉',
           letter: '最純粹的幸福，就是一起分享一盤甜甜的鬆餅，然後對著鏡頭做出最合拍的嘟嘴鬼臉。'
@@ -461,7 +596,11 @@
         {
           id: 14,
           photo: './photo14.jpg',
-          layout: 'bubble-tea-dialogue',
+          styleKey: 'midnight-iris-violet',
+          themeName: '午夜星河紫 · Midnight Iris',
+          accent: '#a78bfa',
+          glow: 'rgba(167, 139, 250, 0.45)',
+          bg: '#0c0618',
           tag: 'CHAPTER 14 · 依戀溫柔',
           title: '靠在一起，全世界只剩溫柔',
           letter: '妳輕輕側靠在我的肩頭，眼神溫柔平靜。只要有妳在身旁，世界的所有紛擾都會煙消雲散。'
@@ -469,7 +608,11 @@
         {
           id: 15,
           photo: './photo15.jpg',
-          layout: 'deep-blue-marine',
+          styleKey: 'abyssal-navy',
+          themeName: '深海紺青 · Abyssal Navy',
+          accent: '#0284c7',
+          glow: 'rgba(2, 132, 199, 0.45)',
+          bg: '#010c18',
           tag: 'CHAPTER 15 · 深藍奇蹟',
           title: '今年，我第一次以男友身份陪妳過生日',
           letter: '巨大魟魚游過的蔚藍光影裡，妳笑得像個孩子。願我們的愛就像這片深海，廣闊而篤定。'
@@ -477,7 +620,11 @@
         {
           id: 16,
           photo: './photo16.jpg',
-          layout: 'wide-screen-bottom-left',
+          styleKey: 'platinum-twilight',
+          themeName: '暮色鉑金金 · Platinum Twilight',
+          accent: '#f1f5f9',
+          glow: 'rgba(241, 245, 249, 0.45)',
+          bg: '#060a10',
           tag: 'CHAPTER 16 · 攜手歲月',
           title: '照片裡的我們，我想牽一輩子的手',
           letter: '穿著情侶裝一起搭著電扶梯，看著這段時間我們走過的路。未來的每一個四季，我都要緊緊牽著妳走過。'
@@ -485,6 +632,11 @@
         {
           id: 17,
           type: 'finale',
+          styleKey: 'signature-tiffany',
+          themeName: '經典蒂芬妮水藍 · Signature Tiffany',
+          accent: '#0abab5',
+          glow: 'rgba(10, 186, 181, 0.55)',
+          bg: '#010c10',
           tag: 'CHAPTER 17 · GRAND FINALE',
           title: '我最愛的 寶寶佳',
           sub: '🎂 生日快樂 ✦ Happy Birthday 🎂'
@@ -497,256 +649,202 @@
       const title = scene.title || '';
       const letter = scene.letter || '';
 
-      switch (scene.layout) {
-        case 'wide-screen-bottom-left':
+      switch (scene.styleKey) {
+        // 01. 冰川冷灰白
+        case 'glacier-silver':
           return `
-            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent pointer-events-none"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#020d13]/90 via-[#01070a]/25 to-transparent pointer-events-none"></div>
             <div class="relative z-10 w-full h-full flex flex-col justify-end px-6 safe-bottom-inset pb-10">
               <div class="max-w-[85vw]">
-                <div class="text-amber-300 font-sans-modern text-[10px] tracking-[0.3em] uppercase mb-1.5 watermark-subtle font-semibold">
-                  ✦ ${tag} ✦
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="w-5 h-[1px] bg-slate-300"></span>
+                  <span class="text-slate-200 font-sans-modern text-[10px] tracking-[0.3em] uppercase font-medium watermark-subtle">${tag}</span>
                 </div>
-                <h3 class="text-xl md:text-2xl font-bold text-white tracking-wider mb-2 watermark-text leading-snug">
+                <h3 class="text-xl md:text-2xl font-bold text-white tracking-wider mb-2 watermark-text leading-snug font-cinzel">
                   ${title}
                 </h3>
-                <p class="text-xs md:text-sm text-rose-100/90 leading-relaxed tracking-wide watermark-text">
+                <p class="text-xs md:text-sm text-slate-200/90 leading-relaxed tracking-wide watermark-text font-serif">
                   ${letter}
                 </p>
               </div>
             </div>`;
 
-        case 'japanese-top-right':
+        // 02. 富士冷薄荷
+        case 'fuji-mint':
           return `
-            <div class="absolute inset-0 bg-gradient-to-b from-black/75 via-transparent to-black/40 pointer-events-none"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-[#01140e]/90 via-transparent to-black/35 pointer-events-none"></div>
             <div class="relative z-10 w-full h-full flex flex-col items-end safe-top-inset pt-24 px-6 text-right">
               <div class="max-w-[80vw]">
-                <div class="text-pink-300 font-sans-modern text-[10px] tracking-[0.25em] uppercase mb-1.5 watermark-subtle">
-                  ${tag}
+                <div class="text-emerald-300 font-sans-modern text-[10px] tracking-[0.28em] uppercase mb-1.5 watermark-subtle font-semibold">
+                  ✦ ${tag}
                 </div>
-                <h3 class="text-xl md:text-2xl font-bold text-white tracking-wider mb-2 watermark-text leading-snug">
+                <h3 class="text-xl md:text-2xl font-bold text-emerald-50 tracking-wider mb-2 watermark-text leading-snug">
                   ${title}
                 </h3>
-                <p class="text-xs md:text-sm text-rose-100/90 leading-relaxed tracking-wide watermark-text">
+                <p class="text-xs md:text-sm text-emerald-100/90 leading-relaxed tracking-wide watermark-text font-serif">
                   「${letter}」
                 </p>
               </div>
             </div>`;
 
-        case 'sky-center-title':
+        // 03. 愛琴海群青
+        case 'aegean-ultramarine':
           return `
-            <div class="absolute inset-0 bg-gradient-to-b from-black/85 via-black/30 to-transparent pointer-events-none"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-[#011422]/90 via-black/25 to-transparent pointer-events-none"></div>
             <div class="relative z-10 w-full h-full flex flex-col items-center safe-top-inset pt-24 px-6 text-center">
               <div class="max-w-[85vw]">
-                <div class="text-amber-300 font-cinzel text-[10px] tracking-[0.35em] uppercase mb-1.5 watermark-subtle font-semibold">
-                  ✦ ${tag} ✦
+                <div class="text-sky-300 font-cinzel text-[10px] tracking-[0.4em] uppercase mb-1.5 watermark-subtle font-semibold">
+                  ── ${tag} ──
                 </div>
-                <h3 class="text-xl md:text-2xl font-bold text-white tracking-widest mb-2 watermark-text leading-snug">
+                <h3 class="text-xl md:text-2xl font-bold text-white tracking-widest mb-2 watermark-text leading-snug font-cinzel">
                   ${title}
                 </h3>
-                <p class="text-xs md:text-sm text-rose-100/90 leading-relaxed tracking-wide watermark-text">
+                <p class="text-xs md:text-sm text-sky-100/90 leading-relaxed tracking-wide watermark-text">
                   ${letter}
                 </p>
               </div>
             </div>`;
 
-        case 'wong-kar-wai-vertical':
+        // 04. 王家衛墨翡翠
+        case 'moody-jade':
           return `
-            <div class="absolute inset-0 bg-gradient-to-l from-black/85 via-black/35 to-transparent pointer-events-none"></div>
+            <div class="absolute inset-0 bg-gradient-to-l from-[#01140d]/90 via-[#010c08]/35 to-transparent pointer-events-none"></div>
             <div class="relative z-10 w-full h-full flex flex-row-reverse items-end justify-start safe-bottom-inset pb-12 px-7">
               <div class="vertical-text-layout max-h-[36vh] flex flex-col items-start gap-4">
-                <div class="text-amber-300 font-bold text-xs tracking-[0.4em] watermark-subtle border-l border-amber-300/40 pl-1">
+                <div class="text-emerald-400 font-bold text-xs tracking-[0.4em] watermark-subtle border-l border-emerald-500/50 pl-1">
                   ${tag}
                 </div>
-                <h3 class="text-xl font-bold text-white tracking-[0.3em] watermark-text leading-loose">
+                <h3 class="text-xl font-bold text-emerald-50 tracking-[0.3em] watermark-text leading-loose">
                   ${title}
                 </h3>
-                <p class="text-xs text-rose-100/90 tracking-[0.25em] leading-loose watermark-text">
+                <p class="text-xs text-emerald-100/90 tracking-[0.25em] leading-loose watermark-text">
                   ${letter}
                 </p>
               </div>
             </div>`;
 
-        case 'french-stamp-card':
+        // 05. 冬夜銀鹽黑白
+        case 'winter-monochrome':
           return `
-            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/60 pointer-events-none"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#05080a]/95 via-black/25 to-[#05080a]/60 pointer-events-none"></div>
             <div class="relative z-10 w-full h-full flex flex-col justify-between safe-top-inset pt-24 safe-bottom-inset pb-10 px-6">
               <div class="max-w-[85vw]">
-                <div class="text-amber-300 font-cinzel text-xs tracking-[0.3em] watermark-subtle font-semibold">
-                  ${scene.dateTag || 'SINCE 2025.12.22'}
+                <div class="text-slate-300 font-mono-code text-[11px] tracking-[0.25em] watermark-subtle">
+                  ${scene.dateTag || 'ARCHIVE · 2025.12.22'}
                 </div>
               </div>
               <div class="max-w-[85vw]">
-                <h3 class="text-xl md:text-2xl font-bold text-white tracking-wider mb-2 watermark-text leading-snug">
+                <h3 class="text-xl md:text-2xl font-bold text-slate-100 tracking-wider mb-2 watermark-text leading-snug font-cinzel">
                   ${title}
                 </h3>
-                <p class="text-xs md:text-sm text-rose-100/90 leading-relaxed tracking-wide watermark-text">
+                <p class="text-xs md:text-sm text-slate-200/90 leading-relaxed tracking-wide watermark-text">
                   ${letter}
                 </p>
               </div>
             </div>`;
 
-        case 'reflection-subtitles-center':
+        // 06. 幽藍深鈷
+        case 'midnight-prussian':
           return `
-            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent pointer-events-none"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#020b18]/90 via-black/30 to-transparent pointer-events-none"></div>
             <div class="relative z-10 w-full h-full flex flex-col items-center justify-end safe-bottom-inset pb-10 px-6 text-center">
               <div class="max-w-[85vw]">
-                <div class="text-pink-300 font-sans-modern text-[10px] tracking-[0.3em] uppercase mb-1.5 watermark-subtle">
+                <div class="text-blue-300 font-sans-modern text-[10px] tracking-[0.35em] uppercase mb-1.5 watermark-subtle">
                   ✦ ${tag} ✦
                 </div>
                 <h3 class="text-xl md:text-2xl font-bold text-white tracking-wider mb-2 watermark-text leading-snug">
                   ${title}
                 </h3>
-                <p class="text-xs md:text-sm text-rose-100/90 leading-relaxed tracking-wide watermark-text">
+                <p class="text-xs md:text-sm text-blue-100/90 leading-relaxed tracking-wide watermark-text">
                   ${letter}
                 </p>
               </div>
             </div>`;
 
-        case 'cherry-blossom-vertical':
+        // 07. 冰霜冷櫻粉紫
+        case 'frosted-sakura-violet':
           return `
-            <div class="absolute inset-0 bg-gradient-to-r from-black/85 via-black/35 to-transparent pointer-events-none"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-[#140616]/90 via-black/35 to-transparent pointer-events-none"></div>
             <div class="relative z-10 w-full h-full flex items-end justify-start safe-bottom-inset pb-12 px-7">
               <div class="vertical-text-layout max-h-[36vh] flex flex-col items-start gap-4">
-                <div class="text-pink-300 font-bold text-xs tracking-[0.4em] watermark-subtle border-r border-pink-300/40 pr-1">
-                  ${tag}
+                <div class="text-pink-300 font-bold text-xs tracking-[0.4em] watermark-subtle border-r border-pink-400/40 pr-1">
+                  🌸 ${tag}
                 </div>
-                <h3 class="text-xl font-bold text-white tracking-[0.3em] watermark-text leading-loose">
+                <h3 class="text-xl font-bold text-pink-50 tracking-[0.3em] watermark-text leading-loose">
                   ${title}
                 </h3>
-                <p class="text-xs text-rose-100/90 tracking-[0.25em] leading-loose watermark-text">
+                <p class="text-xs text-pink-100/90 tracking-[0.25em] leading-loose watermark-text">
                   ${letter}
                 </p>
               </div>
             </div>`;
 
-        case 'diner-sticky-note':
+        // 08. 深夜食堂鋼青
+        case 'industrial-steel':
           return `
-            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent pointer-events-none"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#050c14]/90 via-black/30 to-transparent pointer-events-none"></div>
             <div class="relative z-10 w-full h-full flex flex-col items-end justify-end safe-bottom-inset pb-10 px-6 text-right">
               <div class="max-w-[85vw]">
-                <div class="text-amber-300 font-sans-modern text-[10px] tracking-[0.3em] uppercase mb-1.5 watermark-subtle">
+                <div class="text-slate-300 font-mono-code text-[10px] tracking-[0.3em] uppercase mb-1.5 watermark-subtle">
                   ${tag}
                 </div>
-                <h3 class="text-xl md:text-2xl font-bold text-white tracking-wider mb-2 watermark-text leading-snug">
+                <h3 class="text-xl md:text-2xl font-bold text-slate-100 tracking-wider mb-2 watermark-text leading-snug">
                   ${title}
                 </h3>
-                <p class="text-xs md:text-sm text-rose-100/90 leading-relaxed tracking-wide watermark-text">
+                <p class="text-xs md:text-sm text-slate-200/90 leading-relaxed tracking-wide watermark-text">
                   ${letter}
                 </p>
               </div>
             </div>`;
 
-        case 'lantern-street-vertical':
+        // 09. 雨夜賽博冷青
+        case 'cyber-neon-teal':
           return `
-            <div class="absolute inset-0 bg-gradient-to-l from-black/85 via-black/35 to-transparent pointer-events-none"></div>
+            <div class="absolute inset-0 bg-gradient-to-l from-[#011417]/90 via-black/40 to-transparent pointer-events-none"></div>
             <div class="relative z-10 w-full h-full flex flex-row-reverse items-end justify-start safe-bottom-inset pb-12 px-7">
               <div class="vertical-text-layout max-h-[36vh] flex flex-col items-start gap-4">
-                <div class="text-amber-400 font-bold text-xs tracking-[0.4em] watermark-subtle">
+                <div class="text-teal-300 font-bold text-xs tracking-[0.4em] watermark-subtle">
                   🏮 ${tag}
                 </div>
-                <h3 class="text-xl font-bold text-amber-100 tracking-[0.3em] watermark-text leading-loose">
+                <h3 class="text-xl font-bold text-teal-100 tracking-[0.3em] watermark-text leading-loose">
                   ${title}
                 </h3>
-                <p class="text-xs text-rose-100/90 tracking-[0.25em] leading-loose watermark-text">
+                <p class="text-xs text-teal-50/90 tracking-[0.25em] leading-loose watermark-text">
                   ${letter}
                 </p>
               </div>
             </div>`;
 
-        case 'mushroom-storybook-left':
+        // 10. 炭黑月光灰
+        case 'moonlit-graphite':
           return `
-            <div class="absolute inset-0 bg-gradient-to-r from-black/85 via-black/30 to-transparent pointer-events-none"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-[#050a10]/95 via-black/30 to-transparent pointer-events-none"></div>
             <div class="relative z-10 w-full h-full flex flex-col justify-center safe-bottom-inset px-6">
               <div class="max-w-[85vw]">
-                <div class="text-amber-300 font-sans-modern text-[10px] tracking-[0.3em] uppercase mb-1.5 watermark-subtle">
-                  ✦ ${tag} ✦
+                <div class="text-slate-300 font-mono-code text-[10px] tracking-[0.3em] uppercase mb-2 watermark-subtle">
+                  CHAPTER 10 · 同行心動
                 </div>
                 <h3 class="text-xl md:text-2xl font-bold text-white tracking-wider mb-2 watermark-text leading-snug">
                   ${title}
                 </h3>
-                <p class="text-xs md:text-sm text-rose-100/90 leading-relaxed tracking-wide watermark-text">
+                <p class="text-xs md:text-sm text-slate-200/90 leading-relaxed tracking-wide watermark-text">
                   ${letter}
                 </p>
               </div>
             </div>`;
 
-        case 'road-trip-hud':
+        // 11. 極光天青藍
+        case 'aurora-aero-cyan':
           return `
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#01151a]/90 via-black/30 to-transparent pointer-events-none"></div>
             <div class="relative z-10 w-full h-full flex flex-col justify-end safe-bottom-inset pb-10 px-6">
               <div class="max-w-[85vw]">
-                <div class="text-amber-300 font-sans-modern text-[10px] tracking-[0.35em] uppercase mb-1.5 watermark-subtle">
-                  ${tag}
+                <div class="flex items-center gap-2 text-cyan-300 font-mono-code text-[9px] tracking-[0.25em] mb-1.5 watermark-subtle">
+                  <span>2025.12.22</span>
+                  <span>·</span>
+                  <span>HIGHWAY CRUISE</span>
                 </div>
-                <h3 class="text-xl md:text-2xl font-bold text-white tracking-wider mb-2 watermark-text leading-snug">
-                  ${title}
-                </h3>
-                <p class="text-xs md:text-sm text-rose-100/90 leading-relaxed tracking-wide watermark-text">
-                  ${letter}
-                </p>
-              </div>
-            </div>`;
-
-        case 'playful-badge-top-left':
-          return `
-            <div class="absolute inset-0 bg-gradient-to-b from-black/75 via-transparent to-black/35 pointer-events-none"></div>
-            <div class="relative z-10 w-full h-full flex flex-col items-end safe-top-inset pt-24 px-6 text-right">
-              <div class="max-w-[80vw]">
-                <div class="text-amber-300 font-sans-modern text-[10px] tracking-[0.3em] uppercase mb-1.5 watermark-subtle">
-                  ✌️ ${tag}
-                </div>
-                <h3 class="text-xl md:text-2xl font-bold text-white tracking-wider mb-2 watermark-text leading-snug">
-                  ${title}
-                </h3>
-                <p class="text-xs md:text-sm text-rose-100/90 leading-relaxed tracking-wide watermark-text">
-                  ${letter}
-                </p>
-              </div>
-            </div>`;
-
-        case 'afternoon-center-light':
-          return `
-            <div class="absolute inset-0 bg-gradient-to-b from-black/85 via-black/25 to-transparent pointer-events-none"></div>
-            <div class="relative z-10 w-full h-full flex flex-col items-center safe-top-inset pt-24 px-6 text-center">
-              <div class="max-w-[85vw]">
-                <div class="text-pink-300 font-sans-modern text-[10px] tracking-[0.3em] uppercase mb-1.5 watermark-subtle">
-                  ☕ ${tag}
-                </div>
-                <h3 class="text-xl md:text-2xl font-bold text-white tracking-wider mb-2 watermark-text leading-snug">
-                  ${title}
-                </h3>
-                <p class="text-xs md:text-sm text-rose-100/90 leading-relaxed tracking-wide watermark-text">
-                  ${letter}
-                </p>
-              </div>
-            </div>`;
-
-        case 'bubble-tea-dialogue':
-          return `
-            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent pointer-events-none"></div>
-            <div class="relative z-10 w-full h-full flex flex-col justify-end safe-bottom-inset pb-10 px-6">
-              <div class="max-w-[85vw]">
-                <div class="text-amber-300 font-sans-modern text-[10px] tracking-[0.3em] uppercase mb-1.5 watermark-subtle">
-                  ✦ ${tag} ✦
-                </div>
-                <h3 class="text-xl md:text-2xl font-bold text-white tracking-wider mb-2 watermark-text leading-snug">
-                  ${title}
-                </h3>
-                <p class="text-xs md:text-sm text-rose-100/90 leading-relaxed tracking-wide watermark-text">
-                  ${letter}
-                </p>
-              </div>
-            </div>`;
-
-        case 'deep-blue-marine':
-          return `
-            <div class="absolute inset-0 bg-gradient-to-t from-[#020b18]/90 via-black/35 to-transparent pointer-events-none"></div>
-            <div class="relative z-10 w-full h-full flex flex-col items-center justify-end safe-bottom-inset pb-10 px-6 text-center">
-              <div class="max-w-[85vw]">
-                <div class="text-cyan-300 font-cinzel text-[10px] tracking-[0.4em] uppercase mb-1.5 watermark-subtle">
-                  ✦ ${tag} ✦
-                </div>
-                <h3 class="text-xl md:text-2xl font-bold text-white tracking-widest mb-2 watermark-text leading-snug">
+                <h3 class="text-xl md:text-2xl font-bold text-cyan-50 tracking-wider mb-2 watermark-text leading-snug">
                   ${title}
                 </h3>
                 <p class="text-xs md:text-sm text-cyan-100/90 leading-relaxed tracking-wide watermark-text">
@@ -755,18 +853,105 @@
               </div>
             </div>`;
 
-        default:
+        // 12. 冰晶青檸綠
+        case 'electric-ice-lime':
           return `
-            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent pointer-events-none"></div>
-            <div class="relative z-10 w-full h-full flex flex-col justify-end px-6 safe-bottom-inset pb-10">
+            <div class="absolute inset-0 bg-gradient-to-b from-[#011409]/85 via-transparent to-black/35 pointer-events-none"></div>
+            <div class="relative z-10 w-full h-full flex flex-col items-end safe-top-inset pt-24 px-6 text-right">
+              <div class="max-w-[80vw]">
+                <div class="text-green-300 font-sans-modern text-[10px] tracking-[0.3em] uppercase mb-1.5 watermark-subtle font-semibold">
+                  ✌️ ${tag}
+                </div>
+                <h3 class="text-xl md:text-2xl font-bold text-green-50 tracking-wider mb-2 watermark-text leading-snug">
+                  ${title}
+                </h3>
+                <p class="text-xs md:text-sm text-green-100/90 leading-relaxed tracking-wide watermark-text">
+                  ${letter}
+                </p>
+              </div>
+            </div>`;
+
+        // 13. 冷萃香草灰
+        case 'cold-vanilla-slate':
+          return `
+            <div class="absolute inset-0 bg-gradient-to-b from-[#0b0e14]/90 via-black/30 to-transparent pointer-events-none"></div>
+            <div class="relative z-10 w-full h-full flex flex-col items-center safe-top-inset pt-24 px-6 text-center">
               <div class="max-w-[85vw]">
-                <div class="text-amber-300 font-sans-modern text-[10px] tracking-[0.3em] uppercase mb-1.5 watermark-subtle font-semibold">
-                  ✦ ${tag} ✦
+                <div class="text-slate-300 font-sans-modern text-[10px] tracking-[0.35em] uppercase mb-1.5 watermark-subtle">
+                  ☕ ${tag}
                 </div>
                 <h3 class="text-xl md:text-2xl font-bold text-white tracking-wider mb-2 watermark-text leading-snug">
                   ${title}
                 </h3>
-                <p class="text-xs md:text-sm text-rose-100/90 leading-relaxed tracking-wide watermark-text">
+                <p class="text-xs md:text-sm text-slate-100/90 leading-relaxed tracking-wide watermark-text">
+                  ${letter}
+                </p>
+              </div>
+            </div>`;
+
+        // 14. 午夜星河紫
+        case 'midnight-iris-violet':
+          return `
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0e071c]/90 via-black/30 to-transparent pointer-events-none"></div>
+            <div class="relative z-10 w-full h-full flex flex-col justify-end safe-bottom-inset pb-10 px-6">
+              <div class="max-w-[85vw]">
+                <div class="text-purple-300 font-sans-modern text-[10px] tracking-[0.3em] uppercase mb-1.5 watermark-subtle">
+                  ✦ ${tag} ✦
+                </div>
+                <h3 class="text-xl md:text-2xl font-bold text-purple-50 tracking-wider mb-2 watermark-text leading-snug">
+                  ${title}
+                </h3>
+                <p class="text-xs md:text-sm text-purple-100/90 leading-relaxed tracking-wide watermark-text">
+                  ${letter}
+                </p>
+              </div>
+            </div>`;
+
+        // 15. 深海紺青
+        case 'abyssal-navy':
+          return `
+            <div class="absolute inset-0 bg-gradient-to-t from-[#010e1c]/95 via-black/40 to-transparent pointer-events-none"></div>
+            <div class="relative z-10 w-full h-full flex flex-col items-center justify-end safe-bottom-inset pb-10 px-6 text-center">
+              <div class="max-w-[85vw]">
+                <div class="text-sky-300 font-cinzel text-[10px] tracking-[0.45em] uppercase mb-1.5 watermark-subtle">
+                  ✦ ${tag} ✦
+                </div>
+                <h3 class="text-xl md:text-2xl font-bold text-white tracking-widest mb-2 watermark-text leading-snug font-cinzel">
+                  ${title}
+                </h3>
+                <p class="text-xs md:text-sm text-sky-100/90 leading-relaxed tracking-wide watermark-text">
+                  ${letter}
+                </p>
+              </div>
+            </div>`;
+
+        // 16. 暮色鉑金金
+        case 'platinum-twilight':
+          return `
+            <div class="absolute inset-0 bg-gradient-to-t from-[#060a12]/95 via-black/30 to-transparent pointer-events-none"></div>
+            <div class="relative z-10 w-full h-full flex flex-col justify-end px-6 safe-bottom-inset pb-10">
+              <div class="max-w-[85vw]">
+                <div class="text-slate-200 font-sans-modern text-[10px] tracking-[0.35em] uppercase mb-1.5 watermark-subtle font-semibold">
+                  ✦ ${tag} · THE FINALE OVERTURE ✦
+                </div>
+                <h3 class="text-xl md:text-2xl font-bold text-white tracking-wider mb-2 watermark-text leading-snug font-cinzel">
+                  ${title}
+                </h3>
+                <p class="text-xs md:text-sm text-slate-100/90 leading-relaxed tracking-wide watermark-text">
+                  ${letter}
+                </p>
+              </div>
+            </div>`;
+
+        default:
+          return `
+            <div class="absolute inset-0 bg-gradient-to-t from-[#020b0e]/90 via-black/30 to-transparent pointer-events-none"></div>
+            <div class="relative z-10 w-full h-full flex flex-col justify-end px-6 safe-bottom-inset pb-10">
+              <div class="max-w-[85vw]">
+                <h3 class="text-xl md:text-2xl font-bold text-white tracking-wider mb-2 watermark-text leading-snug">
+                  ${title}
+                </h3>
+                <p class="text-xs md:text-sm text-teal-50/90 leading-relaxed tracking-wide watermark-text">
                   ${letter}
                 </p>
               </div>
@@ -780,21 +965,24 @@
     const bgAudio = document.getElementById('bgAudio');
     const musicToggleBtn = document.getElementById('musicToggleBtn');
     const vinylIcon = document.getElementById('vinylIcon');
+    const vinylCenter = document.getElementById('vinylCenter');
     const introCurtain = document.getElementById('introCurtain');
     const startCinemaBtn = document.getElementById('startCinemaBtn');
+    const marvelGiantTitle = document.getElementById('marvelGiantTitle');
+    const marvelFlipbookTrack = document.getElementById('marvelFlipbookTrack');
 
     let currentIndex = 0;
     let isTransitioning = false;
     let candleBlown = false;
+    let flipbookTimer = null;
 
-    // 初始化渲染進度條與 17 幕場景
     function initScenes() {
       timelineTrack.innerHTML = '';
       cinematicStage.innerHTML = '';
 
       CONFIG.scenes.forEach((scene, index) => {
         const bar = document.createElement('div');
-        bar.className = `h-[2.5px] flex-1 rounded-full transition-all duration-700 ${index === 0 ? 'bg-gradient-to-r from-rose-400 to-amber-300' : 'bg-white/20'}`;
+        bar.className = `h-[2.5px] flex-1 rounded-full transition-all duration-700 ${index === 0 ? 'bg-white shadow-[0_0_8px_rgba(255,255,255,0.7)]' : 'bg-white/20'}`;
         timelineTrack.appendChild(bar);
 
         const sceneEl = document.createElement('section');
@@ -802,37 +990,37 @@
         sceneEl.className = `cinema-stage ${index === 0 ? 'scene-active' : ''}`;
 
         if (scene.type !== 'finale') {
-          // 第 1 至 16 幕：雙層無損電影背景 (底層氛圍光暈 + 前景 100% 完整無裁切照片)
+          // 第 1 至 16 幕：iPhone 16 Pro 雙層無損電影背景
           sceneEl.innerHTML = `
-            <div class="absolute inset-0 w-full h-full overflow-hidden bg-[#050208] flex items-center justify-center">
+            <div class="absolute inset-0 w-full h-full overflow-hidden flex items-center justify-center">
               <img src="${scene.photo}" 
                    alt="" 
                    aria-hidden="true"
-                   class="absolute inset-0 w-full h-full object-cover object-center blur-3xl opacity-40 scale-110 pointer-events-none select-none" />
+                   class="absolute inset-0 w-full h-full object-cover object-center blur-3xl opacity-50 scale-110 pointer-events-none select-none transition-opacity duration-1000" />
               
               <img src="${scene.photo}" 
                    alt="${scene.tag}" 
                    class="relative z-0 max-w-full max-h-full object-contain pointer-events-none select-none drop-shadow-[0_10px_35px_rgba(0,0,0,0.85)]"
-                   onerror="this.src='https://placehold.co/1080x1920/1e0d22/ffffff?text=${encodeURIComponent(scene.tag)}'" />
+                   onerror="this.src='https://placehold.co/1080x1920/031317/ffffff?text=${encodeURIComponent(scene.tag)}'" />
             </div>
             ${renderCustomTypography(scene, index)}
           `;
         } else {
-          // 產生方案 B：橫跨螢幕邊緣的 35mm 電影膠卷（支援來回 ping-pong 捲動與手指滑動）
+          // 橫跨螢幕邊緣的 35mm 電影膠卷流 (鐘擺式雙向呼吸捲動)
           const singleReelHTML = CONFIG.scenes.slice(0, 16).map((item, photoIdx) => `
             <div class="film-frame-card">
-              <div class="flex justify-between px-1 opacity-75">
-                <span class="w-1.5 h-1 rounded-[1px] bg-amber-300"></span>
-                <span class="text-[7px] font-mono text-amber-300/80">#${String(photoIdx + 1).padStart(2, '0')}</span>
-                <span class="w-1.5 h-1 rounded-[1px] bg-amber-300"></span>
+              <div class="flex justify-between px-1 opacity-80">
+                <span class="w-1.5 h-1 rounded-[1px] bg-teal-300"></span>
+                <span class="text-[7px] font-mono text-teal-300/90">#${String(photoIdx + 1).padStart(2, '0')}</span>
+                <span class="w-1.5 h-1 rounded-[1px] bg-teal-300"></span>
               </div>
-              <div class="relative w-full flex-1 overflow-hidden rounded-[2px] bg-zinc-900 my-0.5">
+              <div class="relative w-full flex-1 overflow-hidden rounded-[2px] bg-slate-950 my-0.5">
                 <img src="${item.photo}" class="w-full h-full object-cover pointer-events-none" alt="" loading="lazy" />
               </div>
-              <div class="flex justify-between px-1 opacity-75">
-                <span class="w-1.5 h-1 rounded-[1px] bg-amber-300"></span>
-                <span class="text-[6px] font-sans-modern tracking-tighter text-white/50">KODAK</span>
-                <span class="w-1.5 h-1 rounded-[1px] bg-amber-300"></span>
+              <div class="flex justify-between px-1 opacity-80">
+                <span class="w-1.5 h-1 rounded-[1px] bg-teal-300"></span>
+                <span class="text-[6px] font-sans-modern tracking-tighter text-teal-100/60">TIFFANY</span>
+                <span class="w-1.5 h-1 rounded-[1px] bg-teal-300"></span>
               </div>
             </div>
           `).join('');
@@ -845,25 +1033,25 @@
             </div>
           `;
 
-          // 產生方案 A：導演暗房工作台 · 雙軌錯落光影印樣 (The Director's Dual Contact Reel)
+          // 雙軌錯落光影印樣 (暗房工作台風格)
           const trackACardsHTML = CONFIG.scenes.slice(0, 8).map((item, photoIdx) => `
             <div class="contact-film-card">
-              <div class="flex items-center justify-between px-1 text-[7px] font-mono text-amber-300/80">
-                <span>REC 00:0${photoIdx + 1}:12</span>
+              <div class="flex items-center justify-between px-1 text-[7px] font-mono text-teal-300/90">
+                <span>SCENE 0${photoIdx + 1}</span>
                 <span class="text-white/40">35mm</span>
-                <span>KODAK 5219</span>
+                <span>CHAPTER 0${photoIdx + 1}</span>
               </div>
-              <div class="relative w-full h-[58px] overflow-hidden rounded-[2px] bg-zinc-900 my-0.5">
+              <div class="relative w-full h-[58px] overflow-hidden rounded-[2px] bg-slate-950 my-0.5">
                 <img src="${item.photo}" class="w-full h-full object-cover pointer-events-none" alt="" loading="lazy" />
                 <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent px-1 py-0.5 flex justify-between items-center">
-                  <span class="text-[8px] font-sans-modern font-semibold text-amber-200">#${String(photoIdx + 1).padStart(2, '0')}</span>
+                  <span class="text-[8px] font-sans-modern font-semibold text-teal-200">#${String(photoIdx + 1).padStart(2, '0')}</span>
                   <span class="text-[7px] text-white/70 font-sans-modern">SCENE ${photoIdx + 1}</span>
                 </div>
               </div>
-              <div class="flex items-center justify-between px-1 text-[6.5px] font-mono text-amber-400/60">
-                <span>DX 12.22</span>
-                <span>PROOF SHEET</span>
-                <span>+0.3EV</span>
+              <div class="flex items-center justify-between px-1 text-[6.5px] font-mono text-teal-400/70">
+                <span>2025.12.22</span>
+                <span>MEMORIES</span>
+                <span>FOREVER</span>
               </div>
             </div>
           `).join('');
@@ -872,53 +1060,53 @@
             const actualIdx = photoIdx + 8;
             return `
               <div class="contact-film-card">
-                <div class="flex items-center justify-between px-1 text-[7px] font-mono text-pink-300/80">
-                  <span>REC 00:${actualIdx + 1}:24</span>
+                <div class="flex items-center justify-between px-1 text-[7px] font-mono text-cyan-300/90">
+                  <span>SCENE ${String(actualIdx + 1).padStart(2, '0')}</span>
                   <span class="text-white/40">35mm</span>
-                  <span>VISION3 500T</span>
+                  <span>CHAPTER ${String(actualIdx + 1).padStart(2, '0')}</span>
                 </div>
-                <div class="relative w-full h-[58px] overflow-hidden rounded-[2px] bg-zinc-900 my-0.5">
+                <div class="relative w-full h-[58px] overflow-hidden rounded-[2px] bg-slate-950 my-0.5">
                   <img src="${item.photo}" class="w-full h-full object-cover pointer-events-none" alt="" loading="lazy" />
                   <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent px-1 py-0.5 flex justify-between items-center">
-                    <span class="text-[8px] font-sans-modern font-semibold text-pink-200">#${String(actualIdx + 1).padStart(2, '0')}</span>
+                    <span class="text-[8px] font-sans-modern font-semibold text-cyan-200">#${String(actualIdx + 1).padStart(2, '0')}</span>
                     <span class="text-[7px] text-white/70 font-sans-modern">SCENE ${actualIdx + 1}</span>
                   </div>
                 </div>
-                <div class="flex items-center justify-between px-1 text-[6.5px] font-mono text-pink-300/60">
-                  <span>DX 12.22</span>
-                  <span>FINAL CUT</span>
-                  <span>+0.5EV</span>
+                <div class="flex items-center justify-between px-1 text-[6.5px] font-mono text-cyan-300/70">
+                  <span>2025.12.22</span>
+                  <span>MEMORIES</span>
+                  <span>FOREVER</span>
                 </div>
               </div>
             `;
           }).join('');
 
-          // 第 17 幕主體構建
+          // 第 17 幕主體構建：法式奢華經典原色三層慶典大蛋糕
           sceneEl.innerHTML = `
-            <!-- 終章星空深邃光暈背景 -->
+            <!-- 終章深邃黑曜石 × 蒂芬妮藍光暈背景 -->
             <div class="absolute inset-0 w-full h-full overflow-hidden">
-              <div class="absolute inset-0 bg-gradient-to-b from-[#18031a] via-[#09010e] to-[#030005]"></div>
-              <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(244,63,94,0.22)_0%,_transparent_75%)]"></div>
+              <div class="absolute inset-0 bg-gradient-to-b from-[#02171c] via-[#010c10] to-[#010507]"></div>
+              <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(10,186,181,0.25)_0%,_transparent_75%)]"></div>
             </div>
 
-            <!-- 常態視圖：來回捲動電影膠卷流 + 滿版慶典大蛋糕 -->
+            <!-- 常態視圖：來回捲動電影膠卷流 + 滿版法式經典慶典大蛋糕 -->
             <div id="cakeStageView" class="relative z-30 w-full h-full flex flex-col items-center justify-between text-center px-4 safe-top-inset safe-bottom-inset pt-16 pb-4 transition-all duration-700">
               
               <!-- 頂部電影演職員致敬字幕 (Curtain Call) -->
               <div class="flex flex-col items-center max-w-sm">
-                <div class="text-amber-300 text-[10px] md:text-xs font-sans-modern tracking-[0.35em] uppercase mb-1 watermark-subtle font-semibold">
+                <div class="text-teal-300 text-[10px] md:text-xs font-sans-modern tracking-[0.35em] uppercase mb-1 watermark-subtle font-semibold">
                   ✦ GRAND FINALE · CURTAIN CALL ✦
                 </div>
                 
-                <h2 class="text-2xl md:text-4xl font-black text-white tracking-widest mb-1 drop-shadow-[0_4px_25px_rgba(255,255,255,0.85)]">
+                <h2 class="text-2xl md:text-4xl font-black text-white tracking-widest mb-1 drop-shadow-[0_4px_25px_rgba(255,255,255,0.9)]">
                   我最愛的 寶寶佳
                 </h2>
                 
-                <div class="text-xs md:text-sm font-semibold text-rose-200 watermark-text tracking-widest mb-1">
+                <div class="text-xs md:text-sm font-semibold text-teal-200 tracking-widest mb-1 watermark-subtle">
                   🎂 生日快樂 ✦ Happy Birthday 🎂
                 </div>
 
-                <div class="text-[10px] md:text-[11px] text-white/70 tracking-wider flex items-center gap-2 watermark-subtle">
+                <div class="text-[10px] md:text-[11px] text-teal-100/75 tracking-wider flex items-center gap-2 watermark-subtle">
                   <span>主演：佳寶寶</span>
                   <span>·</span>
                   <span>掌鏡與同行：我</span>
@@ -927,20 +1115,17 @@
                 </div>
               </div>
 
-              <!-- 中部：橫跨螢幕邊緣 · 來回捲動 35mm 電影膠卷 (支援手指拖曳) -->
+              <!-- 中部：橫跨螢幕邊緣 · 來回捲動 35mm 電影膠卷 -->
               <div class="w-full relative my-auto py-1">
-                <div class="text-[9px] font-sans-modern tracking-[0.3em] uppercase text-amber-300/80 text-center mb-1 watermark-subtle">
-                  🎞️ 16 幕時光膠卷長廊 · PANORAMIC REEL
-                </div>
                 ${panoramicReelHTML}
               </div>
 
-              <!-- 底部：滿版三層法式慶典大蛋糕互動區 -->
+              <!-- 底部：滿版法式經典奢華三層慶典大蛋糕 -->
               <div class="relative z-50 flex flex-col items-center w-full max-w-md -mt-2">
                 
                 <!-- 吹熄後的裊裊白煙容器 -->
                 <div id="smokeWisp" class="hidden absolute top-0 w-12 h-20 pointer-events-none z-[60]">
-                  <div class="w-full h-full rounded-full bg-gradient-to-t from-white/95 via-white/50 to-transparent"></div>
+                  <div class="w-full h-full rounded-full bg-gradient-to-t from-slate-100/95 via-amber-100/50 to-transparent"></div>
                 </div>
 
                 <!-- 專屬火苗互動區 -->
@@ -948,133 +1133,139 @@
                   <!-- 火苗提示波紋 -->
                   <div class="absolute w-14 h-14 rounded-full bg-amber-400/25 beacon-pulse pointer-events-none"></div>
 
-                  <!-- 金色層次呼吸火苗 -->
+                  <!-- 琥珀金真實火苗 -->
                   <div id="candleFlame" class="flame-on relative flex items-center justify-center mb-0.5 transition-all duration-700 z-40 pointer-events-none">
-                    <div class="w-7 h-11 rounded-full bg-gradient-to-t from-amber-600 via-amber-300 to-yellow-100 shadow-[0_0_40px_#f59e0b]"></div>
-                    <div class="absolute inset-1.5 rounded-full bg-white/90 blur-[1px]"></div>
+                    <div class="w-7 h-11 rounded-full bg-gradient-to-t from-amber-500 via-yellow-300 to-white shadow-[0_0_40px_#fbbf24]"></div>
+                    <div class="absolute inset-1.5 rounded-full bg-white/95 blur-[1px]"></div>
                   </div>
 
-                  <!-- 火苗專屬點擊判定熱區 (擴大判定範圍至 72px，最高層級 z-[70]) -->
+                  <!-- 火苗專屬點擊判定熱區 -->
                   <button id="flameHitbox" 
                           aria-label="吹熄蠟燭許願" 
                           class="absolute -inset-5 z-[70] w-20 h-20 rounded-full cursor-pointer bg-transparent border-0 outline-none active:scale-95 touch-manipulation"></button>
                 </div>
 
-                <!-- 金色螺旋細長蠟燭 -->
-                <div class="w-3 h-10 bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300 rounded-t-sm shadow-md border-x border-amber-400/40 relative z-30 pointer-events-none"></div>
+                <!-- 白金細長螺旋蠟燭 -->
+                <div class="w-3 h-10 bg-gradient-to-r from-amber-100 via-white to-amber-200 rounded-t-sm shadow-md border-x border-amber-300/40 relative z-30 pointer-events-none"></div>
 
-                <!-- 滿版法式三層蛋糕 SVG 主體 -->
+                <!-- 滿版法式奢華經典三層蛋糕 SVG 主體 -->
                 <div class="relative w-[92vw] max-w-md md:max-w-lg -mt-7 pointer-events-none">
-                  <svg viewBox="0 30 320 185" class="w-full h-auto drop-shadow-[0_25px_50px_rgba(0,0,0,0.9)]">
+                  <svg viewBox="0 30 320 185" class="w-full h-auto drop-shadow-[0_25px_50px_rgba(0,0,0,0.95)]">
                     <defs>
-                      <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#fef08a"/>
-                        <stop offset="50%" stop-color="#f59e0b"/>
-                        <stop offset="100%" stop-color="#b45309"/>
+                      <linearGradient id="gourmetPlateGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#f8fafc"/>
+                        <stop offset="50%" stop-color="#cbd5e1"/>
+                        <stop offset="100%" stop-color="#64748b"/>
                       </linearGradient>
-                      <linearGradient id="creamGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="#fff1f2"/>
-                        <stop offset="100%" stop-color="#fbcfe8"/>
+
+                      <linearGradient id="vanillaCreamGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#ffffff"/>
+                        <stop offset="70%" stop-color="#fdfbf7"/>
+                        <stop offset="100%" stop-color="#f5efe6"/>
                       </linearGradient>
-                      <linearGradient id="chocGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stop-color="#831843"/>
-                        <stop offset="50%" stop-color="#9d174d"/>
-                        <stop offset="100%" stop-color="#701a75"/>
+
+                      <linearGradient id="redVelvetGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#991b1b"/>
+                        <stop offset="50%" stop-color="#881337"/>
+                        <stop offset="100%" stop-color="#4c0519"/>
+                      </linearGradient>
+
+                      <linearGradient id="royalPlaqueGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#4c0519"/>
+                        <stop offset="50%" stop-color="#881337"/>
+                        <stop offset="100%" stop-color="#4c0519"/>
+                      </linearGradient>
+
+                      <linearGradient id="strawberryGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#ef4444"/>
+                        <stop offset="60%" stop-color="#dc2626"/>
+                        <stop offset="100%" stop-color="#991b1b"/>
                       </linearGradient>
                     </defs>
 
-                    <!-- 底座：皇家金屬托盤 -->
-                    <ellipse cx="160" cy="200" rx="148" ry="15" fill="url(#goldGradient)" opacity="0.95"/>
-                    <ellipse cx="160" cy="198" rx="140" ry="12" fill="#fef9c3"/>
+                    <ellipse cx="160" cy="200" rx="148" ry="15" fill="url(#gourmetPlateGrad)" opacity="0.95"/>
+                    <ellipse cx="160" cy="198" rx="140" ry="12" fill="#ffffff"/>
 
-                    <!-- 第一層蛋糕 -->
-                    <path d="M 36 142 C 36 142 36 186 36 186 C 36 199 284 199 284 186 L 284 142 Z" fill="url(#creamGradient)"/>
-                    <ellipse cx="160" cy="142" rx="124" ry="16" fill="#fff5f5"/>
-                    <path d="M 36 145 Q 52 160 68 145 Q 84 160 100 145 Q 116 160 132 145 Q 148 160 164 145 Q 180 160 196 145 Q 212 160 228 145 Q 244 160 260 145 Q 272 155 284 145" fill="none" stroke="#f43f5e" stroke-width="4.5" stroke-linecap="round"/>
+                    <path d="M 36 142 C 36 142 36 186 36 186 C 36 199 284 199 284 186 L 284 142 Z" fill="url(#vanillaCreamGrad)"/>
+                    <ellipse cx="160" cy="142" rx="124" ry="16" fill="#ffffff"/>
+                    <path d="M 36 145 Q 52 160 68 145 Q 84 160 100 145 Q 116 160 132 145 Q 148 160 164 145 Q 180 160 196 145 Q 212 160 228 145 Q 244 160 260 145 Q 272 155 284 145" fill="none" stroke="#fef08a" stroke-width="4.5" stroke-linecap="round"/>
 
-                    <!-- 第二層蛋糕 -->
-                    <path d="M 66 96 L 66 138 C 66 150 254 150 254 138 L 254 96 Z" fill="url(#chocGradient)"/>
-                    <ellipse cx="160" cy="96" rx="94" ry="13" fill="#be185d"/>
-                    <g fill="url(#goldGradient)">
+                    <path d="M 66 96 L 66 138 C 66 150 254 150 254 138 L 254 96 Z" fill="url(#redVelvetGrad)"/>
+                    <ellipse cx="160" cy="96" rx="94" ry="13" fill="#be123c"/>
+                    
+                    <g fill="#fef08a" stroke="#d97706" stroke-width="0.8">
                       <circle cx="85" cy="116" r="3.5"/><circle cx="115" cy="120" r="3.5"/><circle cx="145" cy="122" r="3.5"/><circle cx="175" cy="122" r="3.5"/><circle cx="205" cy="120" r="3.5"/><circle cx="235" cy="116" r="3.5"/>
                     </g>
 
-                    <!-- 第三層蛋糕 -->
-                    <path d="M 96 55 L 96 92 C 96 102 224 102 224 92 L 224 55 Z" fill="url(#creamGradient)"/>
+                    <path d="M 96 55 L 96 92 C 96 102 224 102 224 92 L 224 55 Z" fill="url(#vanillaCreamGrad)"/>
                     <ellipse cx="160" cy="55" rx="64" ry="10" fill="#ffffff"/>
 
-                    <!-- 頂層草莓裝飾 -->
-                    <g fill="#e11d48" stroke="#9f1239" stroke-width="1">
-                      <polygon points="116,50 125,38 134,50"/>
-                      <polygon points="151,46 160,34 169,46"/>
-                      <polygon points="186,50 195,38 204,50"/>
+                    <g fill="url(#strawberryGrad)" stroke="#7f1d1d" stroke-width="0.8">
+                      <polygon points="116,50 125,36 134,50"/>
+                      <polygon points="151,46 160,32 169,46"/>
+                      <polygon points="186,50 195,36 204,50"/>
+                    </g>
+                    <g fill="#16a34a">
+                      <circle cx="125" cy="49" r="2"/><circle cx="160" cy="45" r="2"/><circle cx="195" cy="49" r="2"/>
                     </g>
 
-                    <!-- 專屬燙金生日插牌 -->
-                    <rect x="80" y="146" width="160" height="28" rx="14" fill="#000000" fill-opacity="0.8" stroke="url(#goldGradient)" stroke-width="2"/>
-                    <text x="160" y="164" font-family="'Noto Serif TC', serif" font-size="11.5" font-weight="900" fill="url(#goldGradient)" text-anchor="middle" letter-spacing="2">我最愛的 寶寶佳</text>
+                    <rect x="80" y="146" width="160" height="28" rx="14" fill="url(#royalPlaqueGrad)" stroke="#facc15" stroke-width="2"/>
+                    <text x="160" y="164" font-family="'Noto Serif TC', serif" font-size="11.5" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="2">我最愛的 寶寶佳</text>
                   </svg>
-                </div>
-
-                <div class="text-[11px] text-amber-200/90 watermark-subtle tracking-widest mt-1">
-                  點擊金色火苗許下生日願望 ✨
                 </div>
               </div>
             </div>
 
-            <!-- 轉場後的終極盛典視圖：方案 A【導演暗房工作台 · 雙軌錯落光影印樣】+ 純白無框深情片尾字幕 -->
+            <!-- 轉場後的終極盛典視圖：標題緊貼照片正上方 + 雙軌電影印樣 + 純白無框片尾字幕 -->
             <div id="grandDarkroomStage" class="hidden absolute inset-0 z-40 w-full h-full flex flex-col justify-between p-4 safe-top-inset safe-bottom-inset overflow-hidden">
               
-              <!-- 告白主標題 (純文字浮印，無卡片) -->
-              <div class="text-center pt-2 pb-1 max-w-sm mx-auto">
-                <div class="text-amber-300 text-[10px] tracking-[0.35em] uppercase watermark-subtle font-semibold mb-0.5">
-                  ✦ DIRECTOR'S CUT · 16 CHAPTERS ✦
-                </div>
-                <h3 class="text-xl md:text-2xl font-black text-white tracking-widest watermark-text">
-                  佳寶寶 · 生日快樂 🎂
-                </h3>
-              </div>
-
-              <!-- 雙軌錯落電影印樣長廊 (暗房工作台風格) -->
-              <div class="flex flex-col gap-3 my-auto w-full py-1">
+              <div class="flex-1 flex flex-col justify-center w-full">
                 
-                <!-- 上軌：第 1~8 幕印樣 (向左平滑來回巡禮，支援手動滑動) -->
-                <div>
-                  <div class="text-[8.5px] font-mono tracking-[0.25em] text-amber-300/70 px-2 mb-1 flex items-center justify-between">
-                    <span>REEL 01 · CHAPTERS 01-08</span>
-                    <span>35mm EASTMAN 5219</span>
+                <div class="text-center pb-2 max-w-sm mx-auto">
+                  <div class="text-teal-300 text-[10px] tracking-[0.35em] uppercase watermark-subtle font-semibold mb-0.5">
+                    ✦ DIRECTOR'S CUT · 16 CHAPTERS ✦
                   </div>
-                  <div class="contact-reel-container">
-                    <div class="contact-reel-track-a">
-                      ${trackACardsHTML}
-                    </div>
-                  </div>
+                  <h3 class="text-xl md:text-2xl font-black text-white tracking-widest watermark-text">
+                    佳寶寶 · 生日快樂 🎂
+                  </h3>
                 </div>
 
-                <!-- 下軌：第 9~16 幕印樣 (向右平滑來回巡禮，支援手動滑動) -->
-                <div>
-                  <div class="text-[8.5px] font-mono tracking-[0.25em] text-pink-300/70 px-2 mb-1 flex items-center justify-between">
-                    <span>REEL 02 · CHAPTERS 09-16</span>
-                    <span>35mm VISION3 500T</span>
+                <div class="flex flex-col gap-2.5 w-full py-0.5">
+                  <div>
+                    <div class="text-[8.5px] font-mono tracking-[0.25em] text-teal-300/80 px-2 mb-1 flex items-center justify-between">
+                      <span>REEL 01 · CHAPTERS 01-08</span>
+                      <span>35mm TIFFANY 500T</span>
+                    </div>
+                    <div class="contact-reel-container">
+                      <div class="contact-reel-track-a">
+                        ${trackACardsHTML}
+                      </div>
+                    </div>
                   </div>
-                  <div class="contact-reel-container">
-                    <div class="contact-reel-track-b">
-                      ${trackBCardsHTML}
+
+                  <div>
+                    <div class="text-[8.5px] font-mono tracking-[0.25em] text-cyan-300/80 px-2 mb-1 flex items-center justify-between">
+                      <span>REEL 02 · CHAPTERS 09-16</span>
+                      <span>35mm PLATINUM CUT</span>
+                    </div>
+                    <div class="contact-reel-container">
+                      <div class="contact-reel-track-b">
+                        ${trackBCardsHTML}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <!-- 底部純白深情心願詞 (100% 徹底無卡片，純電影字幕) -->
               <div class="w-full max-w-sm mx-auto text-center px-4 pb-2 z-50">
-                <div class="text-amber-300 font-bold text-xs md:text-sm tracking-[0.35em] uppercase mb-1.5 watermark-text">
+                <div class="text-teal-300 font-bold text-xs md:text-sm tracking-[0.35em] uppercase mb-1.5 watermark-text">
                   ✦ 願望已隨星光升空 · FOREVER & ALWAYS ✦
                 </div>
                 <p class="text-xs md:text-sm text-white/95 leading-relaxed tracking-wider watermark-text font-serif mb-1.5">
                   這 16 幕映畫記錄了我們的相遇與牽手，而屬於我們的電影才正要開場。<br>
                   願佳寶寶歲歲年年皆平安順遂，往後的每一年，我都會緊緊牽著妳！
                 </p>
-                <div class="text-[10px] text-amber-200/80 tracking-[0.3em] font-sans-modern watermark-subtle">
+                <div class="text-[10px] text-teal-200/80 tracking-[0.3em] font-sans-modern watermark-subtle">
                   A CINEMATIC MEMORY // SINCE 2025.12.22
                 </div>
               </div>
@@ -1083,6 +1274,46 @@
         }
         cinematicStage.appendChild(sceneEl);
       });
+
+      updateDynamicTheme(0);
+    }
+
+    function updateDynamicTheme(index) {
+      const scene = CONFIG.scenes[index];
+      if (!scene) return;
+
+      const accent = scene.accent || '#e2e8f0';
+      const glow = scene.glow || 'rgba(226, 232, 240, 0.45)';
+      const bg = scene.bg || '#03070c';
+
+      document.documentElement.style.setProperty('--current-accent', accent);
+      document.documentElement.style.setProperty('--current-glow', glow);
+      document.documentElement.style.setProperty('--current-bg', bg);
+      document.body.style.backgroundColor = bg;
+
+      document.querySelectorAll('#timelineProgressTrack > div').forEach((bar, idx) => {
+        if (idx <= index) {
+          bar.style.backgroundColor = accent;
+          bar.style.boxShadow = `0 0 10px ${accent}`;
+          bar.style.opacity = '1';
+        } else {
+          bar.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+          bar.style.boxShadow = 'none';
+          bar.style.opacity = '0.3';
+        }
+      });
+
+      sceneBadge.textContent = `SCENE ${String(index + 1).padStart(2, '0')} / ${String(CONFIG.scenes.length).padStart(2, '0')}`;
+      sceneBadge.style.color = accent;
+
+      if (vinylCenter) {
+        vinylCenter.style.backgroundColor = accent;
+      }
+      if (vinylIcon) {
+        vinylIcon.style.borderColor = accent;
+      }
+
+      currentStarColor = accent;
     }
 
     function switchScene(nextIndex) {
@@ -1093,7 +1324,6 @@
       const currentEl = document.getElementById(`scene-${currentIndex}`);
       const nextEl = document.getElementById(`scene-${nextIndex}`);
 
-      // 動態停用/啟用全螢幕翻頁熱區 (第 17 幕時徹底隱藏熱區，確保不遮擋火苗)
       const tapPrevZone = document.getElementById('tapPrevZone');
       const tapNextZone = document.getElementById('tapNextZone');
       if (CONFIG.scenes[nextIndex].type === 'finale') {
@@ -1104,7 +1334,6 @@
         if (tapNextZone) tapNextZone.style.display = 'block';
       }
 
-      // 過渡動畫
       const isForward = nextIndex > currentIndex;
       currentEl.className = 'cinema-stage';
       currentEl.classList.add(isForward ? 'exit-slide-left' : 'exit-zoom-out');
@@ -1117,13 +1346,7 @@
         nextEl.classList.add('scene-active');
       });
 
-      // 更新進度條
-      document.querySelectorAll('#timelineProgressTrack > div').forEach((bar, idx) => {
-        bar.className = `h-[2.5px] flex-1 rounded-full transition-all duration-700 ${idx <= nextIndex ? 'bg-gradient-to-r from-rose-400 to-amber-300' : 'bg-white/20'}`;
-      });
-
-      // 更新頂部章節徽章
-      sceneBadge.textContent = `第 ${nextIndex + 1} 幕 / 共 ${CONFIG.scenes.length} 幕`;
+      updateDynamicTheme(nextIndex);
 
       if (CONFIG.scenes[nextIndex].type === 'finale') {
         bindCandleEvent();
@@ -1154,19 +1377,16 @@
         if (candleBlown) return;
         candleBlown = true;
 
-        // 1. 火苗熄滅
         if (candleFlame) {
           candleFlame.style.opacity = '0';
           candleFlame.style.transform = 'scale(0)';
         }
 
-        // 2. 白煙升起
         if (smokeWisp) {
           smokeWisp.classList.remove('hidden');
           smokeWisp.classList.add('smoke-vanish');
         }
 
-        // 3. 電影鏡頭閃光轉場 (Bloom Flash)
         if (bloomFlash) {
           bloomFlash.style.opacity = '0.95';
           setTimeout(() => {
@@ -1174,7 +1394,6 @@
           }, 650);
         }
 
-        // 4. 在閃光遮罩高潮點 (380ms)，將蛋糕視圖切換為導演暗房工作台雙軌印樣
         setTimeout(() => {
           if (cakeStageView) {
             cakeStageView.style.display = 'none';
@@ -1184,18 +1403,18 @@
             grandDarkroomStage.classList.add('darkroom-active-enter');
           }
 
-          // 5. 引爆全螢幕盛大煙火 (持續多波次爆發)
           triggerGrandFireworks();
           setTimeout(() => triggerGrandFireworks(), 1500);
           setTimeout(() => triggerGrandFireworks(), 3000);
         }, 380);
       };
 
-      // 同步綁定 click、touchstart、pointerdown 事件，杜絕 iOS 延遲與攔截
       ['click', 'touchstart', 'pointerdown'].forEach(evtType => {
         flameHitbox.addEventListener(evtType, handleFlameExtinguish, { passive: false });
       });
     }
+
+    let currentStarColor = '#e2e8f0';
 
     function initStars() {
       const canvas = document.getElementById('starsCanvas');
@@ -1225,9 +1444,12 @@
           s.alpha += Math.sin(Date.now() * s.speed) * 0.015;
           ctx.beginPath();
           ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255, 243, 205, ${Math.max(0.1, Math.min(1, s.alpha))})`;
+          
+          ctx.fillStyle = currentStarColor;
+          ctx.globalAlpha = Math.max(0.15, Math.min(0.9, s.alpha));
           ctx.fill();
         });
+        ctx.globalAlpha = 1;
         requestAnimationFrame(animate);
       }
       animate();
@@ -1264,7 +1486,7 @@
             fCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
             fCtx.fillStyle = p.color.replace('ALP', p.alpha.toFixed(2));
             fCtx.shadowColor = p.glow;
-            fCtx.shadowBlur = 10;
+            fCtx.shadowBlur = 12;
             fCtx.fill();
             fCtx.restore();
           }
@@ -1276,11 +1498,11 @@
 
     function createExplosion(x, y) {
       const colors = [
-        'rgba(244, 63, 94, ALP)',
-        'rgba(251, 191, 36, ALP)',
-        'rgba(254, 240, 138, ALP)',
-        'rgba(217, 70, 239, ALP)',
-        'rgba(255, 255, 255, ALP)'
+        'rgba(10, 186, 181, ALP)',
+        'rgba(56, 189, 248, ALP)',
+        'rgba(224, 242, 254, ALP)',
+        'rgba(255, 255, 255, ALP)',
+        'rgba(147, 197, 253, ALP)'
       ];
       const count = 55;
       for (let i = 0; i < count; i++) {
@@ -1297,7 +1519,7 @@
           decay: Math.random() * 0.015 + 0.01,
           size: Math.random() * 2.5 + 1.2,
           color: color,
-          glow: '#fbbf24'
+          glow: '#0abab5'
         });
       }
     }
@@ -1319,6 +1541,32 @@
           createExplosion(s.x, s.y);
         }, s.delay);
       });
+    }
+
+    function startMarvelFlipbook() {
+      const photoUrls = CONFIG.scenes.slice(0, 16).map(s => s.photo);
+      let photoIdx = 0;
+
+      // 預設首圖
+      if (marvelGiantTitle) {
+        marvelGiantTitle.style.backgroundImage = `url('${photoUrls[0]}')`;
+      }
+      if (marvelFlipbookTrack) {
+        marvelFlipbookTrack.style.backgroundImage = `url('${photoUrls[0]}')`;
+      }
+
+      // 75ms 超高速抽幀循環翻頁
+      flipbookTimer = setInterval(() => {
+        photoIdx = (photoIdx + 1) % photoUrls.length;
+        const currentUrl = photoUrls[photoIdx];
+
+        if (marvelGiantTitle) {
+          marvelGiantTitle.style.backgroundImage = `url('${currentUrl}')`;
+        }
+        if (marvelFlipbookTrack) {
+          marvelFlipbookTrack.style.backgroundImage = `url('${currentUrl}')`;
+        }
+      }, 75);
     }
 
     function initInteractions() {
@@ -1364,6 +1612,12 @@
       });
 
       startCinemaBtn.addEventListener('click', () => {
+        // 清理抽幀定時器以釋放行動裝置運算資源
+        if (flipbookTimer) {
+          clearInterval(flipbookTimer);
+          flipbookTimer = null;
+        }
+
         bgAudio.play().then(() => {
           vinylIcon.classList.add('vinyl-spinning');
         }).catch(err => {
@@ -1382,6 +1636,7 @@
       initStars();
       initFireworksCanvas();
       initInteractions();
+      startMarvelFlipbook();
     });
   </script>
 </body>
