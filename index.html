@@ -5,16 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>佳寶寶 · 生日快樂 ✦ Happy Birthday</title>
   
+  <!-- iOS PWA 獨立全螢幕 APP 沉浸體驗配置 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="佳寶寶">
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Serif+TC:wght@300;400;600;900&family=Plus+Jakarta+Sans:wght@300;400;600;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Noto+Serif+TC:wght@400;600;900&family=Plus+Jakarta+Sans:wght@400;600;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
-      /* 全域動態電影色度引擎變數 */
       --current-accent: #e2e8f0;
       --current-glow: rgba(226, 232, 240, 0.45);
       --current-bg: #03070c;
@@ -37,7 +41,83 @@
     .font-cinzel { font-family: 'Cinzel', serif; }
     .font-mono-code { font-family: 'Space Mono', monospace; }
 
-    /* 電影級純文字立體浮水印投影 (徹底去卡片化) */
+    /* 好萊塢世紀晚霞天際背景 */
+    .fox-twilight-sky {
+      background: radial-gradient(ellipse at 50% 90%, #d97706 0%, #b45309 18%, #581c87 45%, #1e1b4b 75%, #050814 100%);
+    }
+
+    /* 3D 鏡頭低角度推軌仰拍動畫 (Camera Crane Shot) */
+    @keyframes foxCranePush {
+      0% {
+        transform: perspective(850px) rotateX(16deg) rotateY(-5deg) translateY(32px) scale(0.92);
+        opacity: 0;
+        filter: brightness(0.65);
+      }
+      25% {
+        opacity: 1;
+      }
+      100% {
+        transform: perspective(850px) rotateX(3deg) rotateY(0deg) translateY(0) scale(1);
+        filter: brightness(1.05);
+      }
+    }
+
+    .fox-crane-active {
+      animation: foxCranePush 4.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      will-change: transform, filter;
+    }
+
+    /* 好萊塢 3D 黃金立體雕刻字體 */
+    .gold-monument-text {
+      background: linear-gradient(135deg, #fef08a 0%, #facc15 25%, #fef9c3 45%, #ca8a04 65%, #854d0e 85%, #fef08a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 
+        0 1px 0 #ca8a04,
+        0 2px 0 #a16207,
+        0 3px 0 #854d0e,
+        0 4px 0 #713f12,
+        0 6px 1px rgba(0, 0, 0, 0.9),
+        0 10px 22px rgba(0, 0, 0, 0.95),
+        0 0 25px rgba(250, 204, 21, 0.5);
+    }
+
+    /* 黃金表面動態金屬掃光 (Specular Sheen Sweep) */
+    @keyframes goldSheenSweep {
+      0%, 20% {
+        background-position: -250% 0;
+      }
+      80%, 100% {
+        background-position: 250% 0;
+      }
+    }
+
+    .gold-sheen-sweep {
+      background-size: 200% auto;
+      animation: goldSheenSweep 5.5s ease-in-out infinite;
+    }
+
+    /* 好萊塢雙層階梯台座立體陰影 */
+    .pedestal-tier-shadow {
+      box-shadow: 
+        0 -2px 10px rgba(254, 240, 138, 0.35),
+        0 4px 18px rgba(0, 0, 0, 0.9),
+        0 12px 35px rgba(0, 0, 0, 0.95),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5);
+    }
+
+    /* 拍立得手稿慢速懸浮微動態 */
+    @keyframes polaroidFloatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-6px) rotate(0.6deg); }
+    }
+
+    .polaroid-levitate-slow {
+      animation: polaroidFloatSlow 5.5s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    /* 電影級純文字立體浮水印投影 */
     .watermark-text {
       text-shadow: 
         0 2px 10px rgba(0, 0, 0, 0.95),
@@ -57,44 +137,7 @@
       text-orientation: mixed;
     }
 
-    /* 漫威經典片頭品牌字標容器 */
-    .marvel-brand-card {
-      position: relative;
-      background: #020b0e;
-      border: 3px solid #ffffff;
-      box-shadow: 
-        0 0 30px rgba(10, 186, 181, 0.4),
-        0 15px 45px rgba(0, 0, 0, 0.9),
-        inset 0 0 25px rgba(0, 0, 0, 0.8);
-    }
-
-    /* 漫威字母剪影內部動態透光翻頁 */
-    .marvel-giant-text {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-weight: 900;
-      letter-spacing: -0.06em;
-      background-size: cover;
-      background-position: center;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.9));
-      transition: background-image 0.04s linear;
-    }
-
-    /* 膠卷掃描線與微微顆粒 */
-    .marvel-scanlines {
-      background: repeating-linear-gradient(
-        to bottom,
-        transparent 0px,
-        transparent 2px,
-        rgba(0, 0, 0, 0.35) 3px,
-        rgba(0, 0, 0, 0.35) 4px
-      );
-    }
-
-    /* 電影級舞台過渡動態 */
+    /* 電影舞台轉場動態 */
     .cinema-stage {
       position: absolute;
       inset: 0;
@@ -174,7 +217,7 @@
       padding-bottom: max(var(--safe-bottom), 16px);
     }
 
-    /* 來回平滑鐘擺呼吸捲動膠卷 (Ping-Pong Reel) */
+    /* 鐘擺呼吸捲動膠卷 */
     .panoramic-reel-wrapper {
       position: relative;
       width: 100vw;
@@ -229,7 +272,7 @@
       padding: 3px;
     }
 
-    /* 導演暗房工作台 · 雙軌錯落光影印樣 */
+    /* 雙軌錯落光影印樣 */
     .contact-reel-container {
       width: 100vw;
       margin-left: -1rem;
@@ -308,7 +351,6 @@
       animation: darkroomEnter 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    /* 火苗呼吸微光光圈 */
     @keyframes beaconGlow {
       0%, 100% { transform: scale(1); opacity: 0.85; }
       50% { transform: scale(1.35); opacity: 0.25; }
@@ -318,7 +360,6 @@
       animation: beaconGlow 1.8s ease-in-out infinite;
     }
 
-    /* 動態環境呼吸光暈 (換幕時平滑轉色) */
     .ambient-dynamic-halo {
       background: radial-gradient(circle at center, var(--current-glow) 0%, transparent 75%);
       transition: background 1s ease-in-out;
@@ -328,87 +369,118 @@
 
 <body class="w-screen h-[100dvh] overflow-hidden select-none">
 
-  <!-- 音訊引擎：優先加載本地 bgm.mp3，備用線上鋼琴曲 -->
+  <!-- 音訊引擎：音軌 1 (BGM 主配樂) + 音軌 2 (第 17 幕生日快樂專屬配樂) -->
   <audio id="bgAudio" loop playsinline preload="auto">
     <source src="./bgm.mp3" type="audio/mpeg">
     <source src="https://cdn.pixabay.com/download/audio/2022/05/16/audio_db6591201e.mp3?filename=romantic-piano-112199.mp3" type="audio/mpeg">
   </audio>
+  <audio id="birthdayAudio" loop playsinline preload="auto">
+    <source src="./birthday.mp3" type="audio/mpeg">
+    <source src="https://www.orangefreesounds.com/wp-content/uploads/2018/11/Happy-birthday-piano-music.mp3" type="audio/mpeg">
+  </audio>
 
-  <!-- 全螢幕動態環境光暈層 (換幕時全螢幕色溫同步轉變) -->
+  <!-- 全螢幕動態環境光暈層 -->
   <div id="dynamicAmbientLayer" class="absolute inset-0 w-full h-full pointer-events-none z-[5] ambient-dynamic-halo"></div>
 
-  <!-- 全螢幕背景粒子畫布 -->
+  <!-- 全螢幕背景星光畫布與煙火畫布 -->
   <canvas id="starsCanvas" class="absolute inset-0 w-full h-full pointer-events-none z-10"></canvas>
   <canvas id="fireworksCanvas" class="absolute inset-0 w-full h-full pointer-events-none z-40"></canvas>
 
-  <!-- 電影高光轉場光暈 (吹熄火苗時爆發) -->
+  <!-- 電影高光轉場光暈 -->
   <div id="bloomFlash" class="fixed inset-0 bg-[#f0fdfa] pointer-events-none z-[80] opacity-0 transition-opacity duration-700"></div>
 
-  <!-- 開場解鎖布幕：漫威影業經典時光翻頁大片開場 (Marvel Studios Flipbook Overture) -->
-  <div id="introCurtain" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#010609] px-4 text-center transition-opacity duration-1000 overflow-hidden">
+  <!-- 開場解鎖布幕：好萊塢 20 世紀福斯規格 · 3D 金屬巨型台座與交錯天際探照燈 -->
+  <div id="introCurtain" class="fixed inset-0 z-50 flex flex-col items-center justify-between fox-twilight-sky px-4 text-center transition-opacity duration-1000 overflow-hidden safe-top-inset safe-bottom-inset pt-8 pb-7">
     
-    <!-- 2.35:1 經典電影寬銀幕上下黑邊遮罩 (Cinematic Letterbox) -->
-    <div class="absolute top-0 inset-x-0 h-11 md:h-16 bg-black pointer-events-none z-20 border-b border-teal-500/15"></div>
-    <div class="absolute bottom-0 inset-x-0 h-11 md:h-16 bg-black pointer-events-none z-20 border-t border-teal-500/15"></div>
-    
-    <!-- 橫貫銀幕中心的冷青微光變形光斑線條 (Anamorphic Line) -->
-    <div class="absolute w-full h-[1px] bg-gradient-to-r from-transparent via-teal-400/35 to-transparent pointer-events-none z-10"></div>
+    <!-- 2.35:1 經典電影寬銀幕上下黑邊遮罩 -->
+    <div class="absolute top-0 inset-x-0 h-10 md:h-14 bg-black pointer-events-none z-20 border-b border-amber-500/20 shadow-md"></div>
+    <div class="absolute bottom-0 inset-x-0 h-10 md:h-14 bg-black pointer-events-none z-20 border-t border-amber-500/20 shadow-md"></div>
 
-    <!-- 漫威影業大片核心展示卡 -->
-    <div class="relative z-20 flex flex-col items-center w-full max-w-sm">
+    <!-- 專屬天際體積光探照燈 Canvas 畫布 (4道物理光束交叉掃射) -->
+    <canvas id="searchlightsCanvas" class="absolute inset-0 w-full h-full pointer-events-none z-10"></canvas>
+
+    <!-- 頂部獨立影展出品人題詞 -->
+    <div class="relative z-20 flex items-center gap-3 opacity-95 mt-4">
+      <span class="w-8 h-[1px] bg-gradient-to-r from-transparent to-amber-300"></span>
+      <span class="text-[9.5px] font-mono tracking-[0.45em] text-amber-200 uppercase font-semibold drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">A SPECIAL CENTURY PRODUCTION</span>
+      <span class="w-8 h-[1px] bg-gradient-to-l from-transparent to-amber-300"></span>
+    </div>
+
+    <!-- 中央核心：好萊塢 3D 金雕巨型台座 (Fox Art-Deco Monument) -->
+    <div class="fox-crane-active relative z-20 flex flex-col items-center my-auto w-full max-w-sm">
       
-      <!-- 頂部出品人標記 -->
-      <div class="flex items-center gap-2 mb-3.5 opacity-90">
-        <span class="w-6 h-[1px] bg-teal-400/60"></span>
-        <span class="text-[9px] font-mono tracking-[0.45em] text-teal-300 uppercase font-semibold">EXCLUSIVE PRODUCTION</span>
-        <span class="w-6 h-[1px] bg-teal-400/60"></span>
+      <!-- 頂部金字裝飾小星芒 -->
+      <div class="flex items-center gap-2 mb-1 opacity-90">
+        <span class="text-amber-300 text-xs animate-pulse">✦</span>
+        <span class="text-[9px] font-mono tracking-[0.35em] text-amber-100 uppercase">SINCE 2025.12.22</span>
+        <span class="text-amber-300 text-xs animate-pulse">✦</span>
       </div>
 
-      <!-- 漫威經典巨型品牌字標框體 (MARVEL BOX) -->
-      <div class="marvel-brand-card relative rounded-[2px] overflow-hidden px-6 py-3 mb-2 w-[86vw] max-w-[310px]">
-        
-        <!-- 底層極速抽幀照片背景 (微模糊營造整體動感) -->
-        <div id="marvelFlipbookTrack" class="absolute inset-0 w-full h-full bg-cover bg-center filter brightness-90 contrast-125 opacity-35 pointer-events-none"></div>
-        
-        <!-- 復古掃描線與顆粒質感 -->
-        <div class="marvel-scanlines absolute inset-0 pointer-events-none"></div>
+      <!-- 第一層金雕大字：佳 寶 寶 -->
+      <div class="relative mb-0.5">
+        <h1 class="gold-monument-text gold-sheen-sweep font-cinzel text-5xl md:text-6xl font-black tracking-[0.18em] leading-none select-none">
+          佳 寶 寶
+        </h1>
+      </div>
 
-        <!-- 漫威核心字母：JIA (字母內部以超高幀率狂飆抽幀翻頁) -->
-        <div class="relative z-10 flex items-center justify-center">
-          <h1 id="marvelGiantTitle" class="marvel-giant-text text-6xl md:text-7xl uppercase leading-none select-none py-1">
-            JIA
-          </h1>
+      <!-- 第二層中階金雕字：CENTURY LOVE -->
+      <div class="relative px-6 py-0.5 rounded-[2px] bg-gradient-to-r from-amber-950/80 via-amber-800/90 to-amber-950/80 border-y border-amber-400/60 shadow-lg mb-1">
+        <div class="gold-monument-text gold-sheen-sweep font-cinzel text-sm md:text-base font-extrabold tracking-[0.42em] leading-tight">
+          CENTURY LOVE
         </div>
       </div>
 
-      <!-- 漫威下層標誌性紅/青金屬銘牌條：STUDIOS -->
-      <div class="flex items-center justify-between w-[86vw] max-w-[310px] px-1 mb-4">
-        <div class="h-[1.5px] flex-1 bg-white/80"></div>
-        <div class="px-3.5 py-0.5 text-[10px] md:text-[11px] font-black font-sans-modern tracking-[0.45em] text-white uppercase bg-teal-600/90 rounded-[2px] shadow-[0_0_15px_#0abab5]">
-          STUDIOS
+      <!-- 第三層階梯台座主體架構 (裝飾藝術建築風格) -->
+      <div class="pedestal-tier-shadow relative w-[82vw] max-w-[310px] bg-gradient-to-b from-[#3a1d06] via-[#221004] to-[#120702] border-t-2 border-amber-400/80 rounded-t-[3px] p-2 flex flex-col items-center">
+        
+        <!-- 基座金色線條邊框 -->
+        <div class="w-full border-b border-amber-500/30 pb-1 mb-2 flex items-center justify-between text-[7px] font-mono text-amber-300/80 px-1">
+          <span>FOX STYLE 35mm</span>
+          <span class="font-bold text-amber-200">GRAND OVERTURE</span>
+          <span>CHAPTERS 1-17</span>
         </div>
-        <div class="h-[1.5px] flex-1 bg-white/80"></div>
-      </div>
 
-      <!-- 漫威官方副標題與時間線 -->
-      <div class="text-[10px] font-mono tracking-[0.3em] text-teal-200/90 uppercase mb-1.5 watermark-subtle">
-        A PRIVATE SCREENING FOR MY LOVE
-      </div>
-      <div class="text-[9px] font-mono tracking-[0.25em] text-slate-400 mb-8 watermark-subtle">
-        SINCE 2025.12.22 · 17 CHAPTERS
-      </div>
+        <!-- 鑲嵌中央：專屬手繪角色原畫 (photo17.jpg 拍立得手稿) -->
+        <div class="polaroid-levitate-slow relative w-[138px] bg-[#fbfbfa] rounded-[3px] p-1.5 pb-2.5 flex flex-col items-center shadow-[0_10px_28px_rgba(0,0,0,0.95),0_0_20px_rgba(250,204,21,0.35)] border border-amber-300/60">
+          
+          <div class="w-full flex items-center justify-between text-[6px] font-mono text-slate-400 px-0.5 mb-1">
+            <span>ORIGINAL ART</span>
+            <span class="text-amber-700 font-bold">2025.12.22</span>
+          </div>
 
-      <!-- 漫威院線首映按鈕 (Premier Pass) -->
-      <button id="startCinemaBtn" class="group relative px-9 py-3 rounded-sm bg-gradient-to-r from-teal-400 via-teal-300 to-cyan-300 text-slate-950 font-sans-modern text-xs tracking-[0.3em] font-black shadow-[0_0_35px_rgba(10,186,181,0.55)] hover:shadow-[0_0_45px_rgba(10,186,181,0.8)] active:scale-95 transition-all flex items-center gap-2.5 cursor-pointer border border-white/70">
-        <span class="w-2 h-2 bg-slate-950 transform rotate-45 group-hover:rotate-90 transition-transform"></span>
-        <span class="uppercase">首映入座 · PREMIERE</span>
+          <div class="relative w-full aspect-square rounded-[2px] overflow-hidden bg-white border border-slate-200 flex items-center justify-center">
+            <img src="./photo17.jpg" 
+                 alt="佳寶寶 手繪原稿" 
+                 class="w-full h-full object-contain pointer-events-none select-none transition-transform duration-700"
+                 onerror="this.src='photo17.jpg'" />
+          </div>
+
+          <div class="w-full mt-1.5 pt-1 border-t border-slate-200/80 flex items-center justify-between px-0.5">
+            <span class="text-[8px] font-serif font-black text-slate-800 tracking-wider">佳寶寶 ✦ 我</span>
+            <span class="text-[6px] font-mono text-amber-700 font-bold uppercase">PROD. PASS</span>
+          </div>
+        </div>
+
+        <!-- 底座金色雕花題詞 -->
+        <div class="w-full mt-2 pt-1 border-t border-amber-500/40 text-center">
+          <div class="text-[8px] font-mono tracking-[0.32em] text-amber-200/90 uppercase font-semibold">
+            A SPECIAL PRODUCTION · FOREVER & ALWAYS
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部：金色電影門票通行按鈕 -->
+    <div class="relative z-20 w-full flex flex-col items-center mb-2">
+      <button id="startCinemaBtn" class="group relative px-9 py-2.5 rounded-full bg-gradient-to-r from-amber-600/90 via-yellow-500/90 to-amber-600/90 border border-yellow-200 text-slate-950 font-sans-modern font-black text-[11px] tracking-[0.38em] shadow-[0_0_30px_rgba(250,204,21,0.6)] hover:shadow-[0_0_45px_rgba(250,204,21,0.9)] active:scale-95 transition-all flex items-center gap-2 cursor-pointer">
+        <span class="w-2 h-2 rounded-full bg-slate-950 animate-ping"></span>
+        <span class="uppercase">進入放映 · ADMIT ONE</span>
       </button>
     </div>
   </div>
 
-  <!-- 頂部進度條與電影導覽列 (顏色隨每幕動態過渡) -->
+  <!-- 頂部進度條與電影導覽列 -->
   <div class="fixed top-0 inset-x-0 z-30 flex flex-col safe-top-inset px-4 pointer-events-none">
-    <!-- 17 段分段進度條 -->
     <div id="timelineProgressTrack" class="flex gap-1 w-full pt-2"></div>
 
     <div class="flex items-center justify-between mt-2.5 px-0.5">
@@ -429,7 +501,7 @@
   <!-- 電影舞台容器 -->
   <main id="cinematicStage" class="relative w-full h-full overflow-hidden"></main>
 
-  <!-- 點擊切換熱區 (第 1~16 幕生效，第 17 幕時動態停用防攔截) -->
+  <!-- 點擊切換熱區 -->
   <div id="tapPrevZone" class="absolute left-0 top-16 bottom-16 w-[30%] z-20"></div>
   <div id="tapNextZone" class="absolute right-0 top-16 bottom-16 w-[70%] z-20"></div>
 
@@ -445,8 +517,8 @@
           glow: 'rgba(226, 232, 240, 0.45)',
           bg: '#03070c',
           tag: 'CHAPTER 01 · 旅途啟程',
-          title: '只要跟妳一起，到哪都是冒險',
-          letter: '拖著行李箱出發的這一刻，妳臉上的笑容比晨光還要耀眼。只要身邊是妳，哪怕只是最平凡的小巷，都是最棒的旅程。'
+          title: '跟妳出門，去哪裡都超級好玩',
+          letter: '每次拖著行李跟妳出門，看到妳笑我就覺得，去哪裡都超級好玩！'
         },
         {
           id: 2,
@@ -457,8 +529,8 @@
           glow: 'rgba(52, 211, 153, 0.45)',
           bg: '#02120b',
           tag: 'CHAPTER 02 · 俏皮笑顏',
-          title: '最融化人心的可愛小動作',
-          letter: '最喜歡妳戳著臉頰笑得這麼可愛的樣子，每一個專屬於妳的鬼臉，都讓我的心徹底融化。'
+          title: '妳一扮鬼臉裝可愛，我就被融化',
+          letter: '最受不了妳戳臉頰裝可愛，每次看妳扮鬼臉我都直接被融化。'
         },
         {
           id: 3,
@@ -469,8 +541,8 @@
           glow: 'rgba(56, 189, 248, 0.45)',
           bg: '#02111d',
           tag: 'CHAPTER 03 · 山海依偎',
-          title: '俯瞰整座山海，眼裡全都是妳',
-          letter: '遠方彩色的房子與開闊海灣再美，都不及站在我身邊、笑著轉過頭來看我的妳。'
+          title: '風景再漂亮，我都只顧著看妳',
+          letter: '雖然海景很漂亮，但我整路都在看妳，根本沒在看海啦。'
         },
         {
           id: 4,
@@ -481,8 +553,8 @@
           glow: 'rgba(16, 185, 129, 0.45)',
           bg: '#01130b',
           tag: 'CHAPTER 04 · 日常依靠',
-          title: '肩頭上的溫度，最踏實的安心',
-          letter: '車廂輕晃的節奏裡，妳把頭輕輕靠在我肩上的那一刻，所有的疲憊都化作最踏實的幸福。'
+          title: '妳累了靠在我肩膀上，心裡好踏實',
+          letter: '搭車妳累了靠在我肩膀上睡覺，那個時候真的覺得心裡好踏實。'
         },
         {
           id: 5,
@@ -494,8 +566,8 @@
           bg: '#07090b',
           tag: 'WALKING TOGETHER · SINCE 2025.12.22',
           dateTag: 'ARCHIVE · 2025.12.22',
-          title: '走進彼此生活後的每一個冬天',
-          letter: '自從2025年末我們牽起彼此的手，每一個走過的小巷、吹過的晚風，都因為身邊緊緊靠著的妳，有了最幸福的意義。'
+          title: '牽起妳的手，是我做過最對的決定',
+          letter: '2025 年底我們牽手在一起，這絕對是我這輩子做過最對的決定。'
         },
         {
           id: 6,
@@ -506,8 +578,8 @@
           glow: 'rgba(96, 165, 250, 0.45)',
           bg: '#020b18',
           tag: 'CHAPTER 06 · 相擁溫存',
-          title: '謝謝妳毫無保留的溫柔與包容',
-          letter: '在落羽松與湖水倒影前緊緊擁抱著妳。謝謝妳走進我的生活，用最大的愛與包容做我最安心的避風港。'
+          title: '謝謝妳總是這麼包容我、對我這麼好',
+          letter: '抱著妳的時候特別放鬆，謝謝妳總是這麼包容我、對我這麼好。'
         },
         {
           id: 7,
@@ -518,8 +590,8 @@
           glow: 'rgba(244, 114, 182, 0.45)',
           bg: '#130514',
           tag: 'CHAPTER 07 · 繁花盛放',
-          title: '花開萬千，不及妳眼裡星光',
-          letter: '盛開的花樹再燦爛，也沒有妳從背後摟著我笑時好看。妳的笑，是我看過最美的春天。'
+          title: '旁邊的花再漂亮，也沒有妳好看',
+          letter: '旁邊的花開得再漂亮也沒妳好看，妳一笑我就覺得心情超好。'
         },
         {
           id: 8,
@@ -529,9 +601,9 @@
           accent: '#94a3b8',
           glow: 'rgba(148, 163, 184, 0.45)',
           bg: '#050b12',
-          tag: 'CHAPTER 08 · 朝夕滋味',
-          title: '平淡一餐，也是一輩子的滋味',
-          letter: '並肩坐在一起，吃著熱騰騰的美食，聊著今天瑣碎的小事。有妳在的日子，生活就是最好的味道。'
+          tag: 'CHAPTER 08 · 假日燒肉約會',
+          title: '放假跟妳大口吃燒肉，真的超爽',
+          letter: '假日跟妳一起大口吃燒肉、喝飲料聊廢話，看妳吃得這麼滿足開心，我就覺得超級幸福！'
         },
         {
           id: 9,
@@ -542,8 +614,8 @@
           glow: 'rgba(45, 212, 191, 0.45)',
           bg: '#011417',
           tag: 'CHAPTER 09 · 人間煙火',
-          title: '燈火闌珊處，世界唯妳璀璨',
-          letter: '在熱鬧的紅燈籠與人潮裡緊緊牽著妳的手。世界再喧囂，只要握著妳，心裡就無比篤定。'
+          title: '走在滿滿人潮裡，牽著妳就特別安心',
+          letter: '走在人超多的地方，緊緊牽著妳的手，就覺得整個人特別安心。'
         },
         {
           id: 10,
@@ -554,8 +626,8 @@
           glow: 'rgba(203, 213, 225, 0.45)',
           bg: '#060a0f',
           tag: 'CHAPTER 10 · 同行心動',
-          title: '在公司共識一年，到彼此的全世界',
-          letter: '在同公司共識一年的默契與心動，讓我們牽手走到了一起。命運給了我最珍貴的禮物，就是身邊可愛的妳。'
+          title: '從同事變成另一半，真的太神奇了',
+          letter: '在同公司當同事一年，誰知道我們會走到一起，真的太神奇了！'
         },
         {
           id: 11,
@@ -566,8 +638,8 @@
           glow: 'rgba(6, 182, 212, 0.45)',
           bg: '#01151a',
           tag: 'CHAPTER 11 · 並肩兜風',
-          title: '專屬副駕駛座，奔赴所有美好',
-          letter: '最喜歡妳坐在副駕駛座開心的模樣。只要身旁是妳，車開往哪裡，都是最棒的風景。'
+          title: '專屬副駕，身邊有妳開去哪都很棒',
+          letter: '妳坐副駕就是我最好的副駕，只要身邊是妳，開去哪都很開心。'
         },
         {
           id: 12,
@@ -578,8 +650,8 @@
           glow: 'rgba(74, 222, 128, 0.45)',
           bg: '#021408',
           tag: 'CHAPTER 12 · 默契萌趣',
-          title: '在妳身邊，做最自在快樂的小孩',
-          letter: '穿著同款情侶裝、抱著搞怪比耶的玩偶。在妳面前我永遠不必偽裝，只管放肆地大笑。'
+          title: '跟妳在一起，就能放心當個幼稚鬼',
+          letter: '穿情侶裝一起耍笨抱玩偶，在妳身邊我就可以放心地當個幼稚鬼。'
         },
         {
           id: 13,
@@ -590,8 +662,8 @@
           glow: 'rgba(226, 232, 240, 0.45)',
           bg: '#0c0f14',
           tag: 'CHAPTER 13 · 甜蜜淘氣',
-          title: '陪妳吃甜點，陪妳做幼稚鬼臉',
-          letter: '最純粹的幸福，就是一起分享一盤甜甜的鬆餅，然後對著鏡頭做出最合拍的嘟嘴鬼臉。'
+          title: '陪妳大吃甜點、對著鏡頭一起耍笨',
+          letter: '一起吃鬆餅甜點、一起對著鏡頭嘟嘴，我們兩個真的超級合拍。'
         },
         {
           id: 14,
@@ -602,8 +674,8 @@
           glow: 'rgba(167, 139, 250, 0.45)',
           bg: '#0c0618',
           tag: 'CHAPTER 14 · 依戀溫柔',
-          title: '靠在一起，全世界只剩溫柔',
-          letter: '妳輕輕側靠在我的肩頭，眼神溫柔平靜。只要有妳在身旁，世界的所有紛擾都會煙消雲散。'
+          title: '只要妳靠過來，累一整天都瞬間沒事',
+          letter: '只要妳靠在我身邊，工作再累、事情再煩，我都瞬間覺得沒事了。'
         },
         {
           id: 15,
@@ -614,8 +686,8 @@
           glow: 'rgba(2, 132, 199, 0.45)',
           bg: '#010c18',
           tag: 'CHAPTER 15 · 深藍奇蹟',
-          title: '今年，我第一次以男友身份陪妳過生日',
-          letter: '巨大魟魚游過的蔚藍光影裡，妳笑得像個孩子。願我們的愛就像這片深海，廣闊而篤定。'
+          title: '第一次當妳男友過生日，以後每一年都是我',
+          letter: '今年是我第一次以男朋友的身份陪妳過生日，以後每一年都要是我！'
         },
         {
           id: 16,
@@ -626,8 +698,8 @@
           glow: 'rgba(241, 245, 249, 0.45)',
           bg: '#060a10',
           tag: 'CHAPTER 16 · 攜手歲月',
-          title: '照片裡的我們，我想牽一輩子的手',
-          letter: '穿著情侶裝一起搭著電扶梯，看著這段時間我們走過的路。未來的每一個四季，我都要緊緊牽著妳走過。'
+          title: '看著這些照片，好想牽著妳走一輩子',
+          letter: '翻著這些照片，真的好想牽著妳的手一直走下去，走很久很久。'
         },
         {
           id: 17,
@@ -638,19 +710,34 @@
           glow: 'rgba(10, 186, 181, 0.55)',
           bg: '#010c10',
           tag: 'CHAPTER 17 · GRAND FINALE',
-          title: '我最愛的 寶寶佳',
+          title: '我最愛的 寶寶佳 · 生日快樂',
           sub: '🎂 生日快樂 ✦ Happy Birthday 🎂'
         }
       ]
     };
 
-    function renderCustomTypography(scene, idx) {
+    const cinematicStage = document.getElementById('cinematicStage');
+    const timelineTrack = document.getElementById('timelineProgressTrack');
+    const sceneBadge = document.getElementById('sceneBadge');
+    const bgAudio = document.getElementById('bgAudio');
+    const birthdayAudio = document.getElementById('birthdayAudio');
+    const musicToggleBtn = document.getElementById('musicToggleBtn');
+    const vinylIcon = document.getElementById('vinylIcon');
+    const vinylCenter = document.getElementById('vinylCenter');
+    const introCurtain = document.getElementById('introCurtain');
+    const startCinemaBtn = document.getElementById('startCinemaBtn');
+
+    let currentIndex = 0;
+    let isTransitioning = false;
+    let candleBlown = false;
+    let audioFadeInterval = null;
+
+    function renderCustomTypography(scene, index) {
       const tag = scene.tag || '';
       const title = scene.title || '';
       const letter = scene.letter || '';
 
       switch (scene.styleKey) {
-        // 01. 冰川冷灰白
         case 'glacier-silver':
           return `
             <div class="absolute inset-0 bg-gradient-to-t from-[#020d13]/90 via-[#01070a]/25 to-transparent pointer-events-none"></div>
@@ -669,7 +756,6 @@
               </div>
             </div>`;
 
-        // 02. 富士冷薄荷
         case 'fuji-mint':
           return `
             <div class="absolute inset-0 bg-gradient-to-b from-[#01140e]/90 via-transparent to-black/35 pointer-events-none"></div>
@@ -687,7 +773,6 @@
               </div>
             </div>`;
 
-        // 03. 愛琴海群青
         case 'aegean-ultramarine':
           return `
             <div class="absolute inset-0 bg-gradient-to-b from-[#011422]/90 via-black/25 to-transparent pointer-events-none"></div>
@@ -705,7 +790,6 @@
               </div>
             </div>`;
 
-        // 04. 王家衛墨翡翠
         case 'moody-jade':
           return `
             <div class="absolute inset-0 bg-gradient-to-l from-[#01140d]/90 via-[#010c08]/35 to-transparent pointer-events-none"></div>
@@ -723,7 +807,6 @@
               </div>
             </div>`;
 
-        // 05. 冬夜銀鹽黑白
         case 'winter-monochrome':
           return `
             <div class="absolute inset-0 bg-gradient-to-t from-[#05080a]/95 via-black/25 to-[#05080a]/60 pointer-events-none"></div>
@@ -743,7 +826,6 @@
               </div>
             </div>`;
 
-        // 06. 幽藍深鈷
         case 'midnight-prussian':
           return `
             <div class="absolute inset-0 bg-gradient-to-t from-[#020b18]/90 via-black/30 to-transparent pointer-events-none"></div>
@@ -761,7 +843,6 @@
               </div>
             </div>`;
 
-        // 07. 冰霜冷櫻粉紫
         case 'frosted-sakura-violet':
           return `
             <div class="absolute inset-0 bg-gradient-to-r from-[#140616]/90 via-black/35 to-transparent pointer-events-none"></div>
@@ -779,7 +860,6 @@
               </div>
             </div>`;
 
-        // 08. 深夜食堂鋼青
         case 'industrial-steel':
           return `
             <div class="absolute inset-0 bg-gradient-to-t from-[#050c14]/90 via-black/30 to-transparent pointer-events-none"></div>
@@ -797,7 +877,6 @@
               </div>
             </div>`;
 
-        // 09. 雨夜賽博冷青
         case 'cyber-neon-teal':
           return `
             <div class="absolute inset-0 bg-gradient-to-l from-[#011417]/90 via-black/40 to-transparent pointer-events-none"></div>
@@ -815,14 +894,13 @@
               </div>
             </div>`;
 
-        // 10. 炭黑月光灰
         case 'moonlit-graphite':
           return `
             <div class="absolute inset-0 bg-gradient-to-r from-[#050a10]/95 via-black/30 to-transparent pointer-events-none"></div>
             <div class="relative z-10 w-full h-full flex flex-col justify-center safe-bottom-inset px-6">
               <div class="max-w-[85vw]">
                 <div class="text-slate-300 font-mono-code text-[10px] tracking-[0.3em] uppercase mb-2 watermark-subtle">
-                  CHAPTER 10 · 同行心動
+                  ${tag}
                 </div>
                 <h3 class="text-xl md:text-2xl font-bold text-white tracking-wider mb-2 watermark-text leading-snug">
                   ${title}
@@ -833,7 +911,6 @@
               </div>
             </div>`;
 
-        // 11. 極光天青藍
         case 'aurora-aero-cyan':
           return `
             <div class="absolute inset-0 bg-gradient-to-t from-[#01151a]/90 via-black/30 to-transparent pointer-events-none"></div>
@@ -853,7 +930,6 @@
               </div>
             </div>`;
 
-        // 12. 冰晶青檸綠
         case 'electric-ice-lime':
           return `
             <div class="absolute inset-0 bg-gradient-to-b from-[#011409]/85 via-transparent to-black/35 pointer-events-none"></div>
@@ -871,7 +947,6 @@
               </div>
             </div>`;
 
-        // 13. 冷萃香草灰
         case 'cold-vanilla-slate':
           return `
             <div class="absolute inset-0 bg-gradient-to-b from-[#0b0e14]/90 via-black/30 to-transparent pointer-events-none"></div>
@@ -889,7 +964,6 @@
               </div>
             </div>`;
 
-        // 14. 午夜星河紫
         case 'midnight-iris-violet':
           return `
             <div class="absolute inset-0 bg-gradient-to-t from-[#0e071c]/90 via-black/30 to-transparent pointer-events-none"></div>
@@ -907,7 +981,6 @@
               </div>
             </div>`;
 
-        // 15. 深海紺青
         case 'abyssal-navy':
           return `
             <div class="absolute inset-0 bg-gradient-to-t from-[#010e1c]/95 via-black/40 to-transparent pointer-events-none"></div>
@@ -925,7 +998,6 @@
               </div>
             </div>`;
 
-        // 16. 暮色鉑金金
         case 'platinum-twilight':
           return `
             <div class="absolute inset-0 bg-gradient-to-t from-[#060a12]/95 via-black/30 to-transparent pointer-events-none"></div>
@@ -959,23 +1031,6 @@
       }
     }
 
-    const cinematicStage = document.getElementById('cinematicStage');
-    const timelineTrack = document.getElementById('timelineProgressTrack');
-    const sceneBadge = document.getElementById('sceneBadge');
-    const bgAudio = document.getElementById('bgAudio');
-    const musicToggleBtn = document.getElementById('musicToggleBtn');
-    const vinylIcon = document.getElementById('vinylIcon');
-    const vinylCenter = document.getElementById('vinylCenter');
-    const introCurtain = document.getElementById('introCurtain');
-    const startCinemaBtn = document.getElementById('startCinemaBtn');
-    const marvelGiantTitle = document.getElementById('marvelGiantTitle');
-    const marvelFlipbookTrack = document.getElementById('marvelFlipbookTrack');
-
-    let currentIndex = 0;
-    let isTransitioning = false;
-    let candleBlown = false;
-    let flipbookTimer = null;
-
     function initScenes() {
       timelineTrack.innerHTML = '';
       cinematicStage.innerHTML = '';
@@ -990,7 +1045,6 @@
         sceneEl.className = `cinema-stage ${index === 0 ? 'scene-active' : ''}`;
 
         if (scene.type !== 'finale') {
-          // 第 1 至 16 幕：iPhone 16 Pro 雙層無損電影背景
           sceneEl.innerHTML = `
             <div class="absolute inset-0 w-full h-full overflow-hidden flex items-center justify-center">
               <img src="${scene.photo}" 
@@ -1006,7 +1060,6 @@
             ${renderCustomTypography(scene, index)}
           `;
         } else {
-          // 橫跨螢幕邊緣的 35mm 電影膠卷流 (鐘擺式雙向呼吸捲動)
           const singleReelHTML = CONFIG.scenes.slice(0, 16).map((item, photoIdx) => `
             <div class="film-frame-card">
               <div class="flex justify-between px-1 opacity-80">
@@ -1033,7 +1086,6 @@
             </div>
           `;
 
-          // 雙軌錯落光影印樣 (暗房工作台風格)
           const trackACardsHTML = CONFIG.scenes.slice(0, 8).map((item, photoIdx) => `
             <div class="contact-film-card">
               <div class="flex items-center justify-between px-1 text-[7px] font-mono text-teal-300/90">
@@ -1081,25 +1133,21 @@
             `;
           }).join('');
 
-          // 第 17 幕主體構建：法式奢華經典原色三層慶典大蛋糕
           sceneEl.innerHTML = `
-            <!-- 終章深邃黑曜石 × 蒂芬妮藍光暈背景 -->
             <div class="absolute inset-0 w-full h-full overflow-hidden">
               <div class="absolute inset-0 bg-gradient-to-b from-[#02171c] via-[#010c10] to-[#010507]"></div>
               <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(10,186,181,0.25)_0%,_transparent_75%)]"></div>
             </div>
 
-            <!-- 常態視圖：來回捲動電影膠卷流 + 滿版法式經典慶典大蛋糕 -->
             <div id="cakeStageView" class="relative z-30 w-full h-full flex flex-col items-center justify-between text-center px-4 safe-top-inset safe-bottom-inset pt-16 pb-4 transition-all duration-700">
               
-              <!-- 頂部電影演職員致敬字幕 (Curtain Call) -->
               <div class="flex flex-col items-center max-w-sm">
                 <div class="text-teal-300 text-[10px] md:text-xs font-sans-modern tracking-[0.35em] uppercase mb-1 watermark-subtle font-semibold">
                   ✦ GRAND FINALE · CURTAIN CALL ✦
                 </div>
                 
                 <h2 class="text-2xl md:text-4xl font-black text-white tracking-widest mb-1 drop-shadow-[0_4px_25px_rgba(255,255,255,0.9)]">
-                  我最愛的 寶寶佳
+                  我最愛的 寶寶佳 · 生日快樂
                 </h2>
                 
                 <div class="text-xs md:text-sm font-semibold text-teal-200 tracking-widest mb-1 watermark-subtle">
@@ -1115,40 +1163,30 @@
                 </div>
               </div>
 
-              <!-- 中部：橫跨螢幕邊緣 · 來回捲動 35mm 電影膠卷 -->
               <div class="w-full relative my-auto py-1">
                 ${panoramicReelHTML}
               </div>
 
-              <!-- 底部：滿版法式經典奢華三層慶典大蛋糕 -->
               <div class="relative z-50 flex flex-col items-center w-full max-w-md -mt-2">
-                
-                <!-- 吹熄後的裊裊白煙容器 -->
                 <div id="smokeWisp" class="hidden absolute top-0 w-12 h-20 pointer-events-none z-[60]">
                   <div class="w-full h-full rounded-full bg-gradient-to-t from-slate-100/95 via-amber-100/50 to-transparent"></div>
                 </div>
 
-                <!-- 專屬火苗互動區 -->
                 <div class="relative flex items-center justify-center">
-                  <!-- 火苗提示波紋 -->
                   <div class="absolute w-14 h-14 rounded-full bg-amber-400/25 beacon-pulse pointer-events-none"></div>
 
-                  <!-- 琥珀金真實火苗 -->
                   <div id="candleFlame" class="flame-on relative flex items-center justify-center mb-0.5 transition-all duration-700 z-40 pointer-events-none">
                     <div class="w-7 h-11 rounded-full bg-gradient-to-t from-amber-500 via-yellow-300 to-white shadow-[0_0_40px_#fbbf24]"></div>
                     <div class="absolute inset-1.5 rounded-full bg-white/95 blur-[1px]"></div>
                   </div>
 
-                  <!-- 火苗專屬點擊判定熱區 -->
                   <button id="flameHitbox" 
                           aria-label="吹熄蠟燭許願" 
                           class="absolute -inset-5 z-[70] w-20 h-20 rounded-full cursor-pointer bg-transparent border-0 outline-none active:scale-95 touch-manipulation"></button>
                 </div>
 
-                <!-- 白金細長螺旋蠟燭 -->
                 <div class="w-3 h-10 bg-gradient-to-r from-amber-100 via-white to-amber-200 rounded-t-sm shadow-md border-x border-amber-300/40 relative z-30 pointer-events-none"></div>
 
-                <!-- 滿版法式奢華經典三層蛋糕 SVG 主體 -->
                 <div class="relative w-[92vw] max-w-md md:max-w-lg -mt-7 pointer-events-none">
                   <svg viewBox="0 30 320 185" class="w-full h-auto drop-shadow-[0_25px_50px_rgba(0,0,0,0.95)]">
                     <defs>
@@ -1216,11 +1254,8 @@
               </div>
             </div>
 
-            <!-- 轉場後的終極盛典視圖：標題緊貼照片正上方 + 雙軌電影印樣 + 純白無框片尾字幕 -->
             <div id="grandDarkroomStage" class="hidden absolute inset-0 z-40 w-full h-full flex flex-col justify-between p-4 safe-top-inset safe-bottom-inset overflow-hidden">
-              
               <div class="flex-1 flex flex-col justify-center w-full">
-                
                 <div class="text-center pb-2 max-w-sm mx-auto">
                   <div class="text-teal-300 text-[10px] tracking-[0.35em] uppercase watermark-subtle font-semibold mb-0.5">
                     ✦ DIRECTOR'S CUT · 16 CHAPTERS ✦
@@ -1262,8 +1297,7 @@
                   ✦ 願望已隨星光升空 · FOREVER & ALWAYS ✦
                 </div>
                 <p class="text-xs md:text-sm text-white/95 leading-relaxed tracking-wider watermark-text font-serif mb-1.5">
-                  這 16 幕映畫記錄了我們的相遇與牽手，而屬於我們的電影才正要開場。<br>
-                  願佳寶寶歲歲年年皆平安順遂，往後的每一年，我都會緊緊牽著妳！
+                  佳寶寶生日快樂！不管未來面臨什麼，往後的每一年，我都會緊緊牽著妳！
                 </p>
                 <div class="text-[10px] text-teal-200/80 tracking-[0.3em] font-sans-modern watermark-subtle">
                   A CINEMATIC MEMORY // SINCE 2025.12.22
@@ -1349,7 +1383,10 @@
       updateDynamicTheme(nextIndex);
 
       if (CONFIG.scenes[nextIndex].type === 'finale') {
+        crossfadeAudio(bgAudio, birthdayAudio, 1500);
         bindCandleEvent();
+      } else if (CONFIG.scenes[currentIndex].type === 'finale') {
+        crossfadeAudio(birthdayAudio, bgAudio, 1500);
       }
 
       currentIndex = nextIndex;
@@ -1414,6 +1451,86 @@
       });
     }
 
+    function initFoxSearchlights() {
+      const canvas = document.getElementById('searchlightsCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      // 4 道好萊塢經典探照燈光源 (左後、左前、右前、右後)
+      const lights = [
+        { baseXRatio: 0.14, baseYRatio: 0.88, angleMin: -0.42, angleMax: 0.35, speed: 0.0016, phase: 0.0,  beamWidthTop: 160, color: 'rgba(254, 240, 138, 0.45)' },
+        { baseXRatio: 0.32, baseYRatio: 0.94, angleMin: -0.65, angleMax: 0.15, speed: 0.0021, phase: 1.8,  beamWidthTop: 190, color: 'rgba(255, 255, 255, 0.52)' },
+        { baseXRatio: 0.68, baseYRatio: 0.94, angleMin: -0.15, angleMax: 0.65, speed: 0.0019, phase: 3.5,  beamWidthTop: 190, color: 'rgba(255, 255, 255, 0.52)' },
+        { baseXRatio: 0.86, baseYRatio: 0.88, angleMin: -0.35, angleMax: 0.42, speed: 0.0015, phase: 5.2,  beamWidthTop: 160, color: 'rgba(254, 240, 138, 0.45)' }
+      ];
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const t = Date.now();
+
+        // 設置合成模式為 screen 實現光束交叉時真實的光學相加高光效果
+        ctx.save();
+        ctx.globalCompositeOperation = 'screen';
+
+        lights.forEach(l => {
+          const bx = canvas.width * l.baseXRatio;
+          const by = canvas.height * l.baseYRatio;
+          
+          // 計算當前探照燈擺動角度 (正弦平滑交錯)
+          const sweep = (Math.sin(t * l.speed + l.phase) + 1) / 2; // 0 ~ 1
+          const angle = l.angleMin + sweep * (l.angleMax - l.angleMin);
+
+          // 計算光束頂部中心座標 (延伸出畫布上方)
+          const beamLen = canvas.height * 1.35;
+          const tx = bx + Math.sin(angle) * beamLen;
+          const ty = by - Math.cos(angle) * beamLen;
+
+          // 計算法向量以構建梯形體積光束
+          const perpX = Math.cos(angle);
+          const perpY = Math.sin(angle);
+
+          const baseHalfW = 10;
+          const topHalfW = l.beamWidthTop * (canvas.width / 420); // 隨螢幕寬度響應式等比縮放
+
+          ctx.beginPath();
+          ctx.moveTo(bx - perpX * baseHalfW, by - perpY * baseHalfW);
+          ctx.lineTo(tx - perpX * topHalfW, ty - perpY * topHalfW);
+          ctx.lineTo(tx + perpX * topHalfW, ty + perpY * topHalfW);
+          ctx.lineTo(bx + perpX * baseHalfW, by + perpY * baseHalfW);
+          ctx.closePath();
+
+          // 體積光漸層：基座聚焦亮白 ➔ 中段暖金 ➔ 頂端漸隱
+          const grad = ctx.createLinearGradient(bx, by, tx, ty);
+          grad.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+          grad.addColorStop(0.12, l.color);
+          grad.addColorStop(0.65, l.color.replace('0.52', '0.22').replace('0.45', '0.18'));
+          grad.addColorStop(1, 'rgba(254, 240, 138, 0)');
+
+          ctx.fillStyle = grad;
+          ctx.fill();
+
+          // 繪製探照燈發光鏡頭底座光芒
+          ctx.beginPath();
+          ctx.arc(bx, by, 12, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+          ctx.shadowColor = '#fef08a';
+          ctx.shadowBlur = 25;
+          ctx.fill();
+        });
+
+        ctx.restore();
+        requestAnimationFrame(render);
+      }
+      render();
+    }
+
     let currentStarColor = '#e2e8f0';
 
     function initStars() {
@@ -1456,7 +1573,10 @@
     }
 
     let particles = [];
+    let rockets = [];
+    let confetti = [];
     let fireworksCanvas, fCtx;
+    let skyFlashAlpha = 0;
 
     function initFireworksCanvas() {
       fireworksCanvas = document.getElementById('fireworksCanvas');
@@ -1471,11 +1591,43 @@
 
       function loop() {
         fCtx.clearRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+
+        if (skyFlashAlpha > 0) {
+          fCtx.save();
+          fCtx.fillStyle = `rgba(10, 186, 181, ${skyFlashAlpha.toFixed(2)})`;
+          fCtx.fillRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+          fCtx.restore();
+          skyFlashAlpha *= 0.88;
+          if (skyFlashAlpha < 0.01) skyFlashAlpha = 0;
+        }
+
+        for (let i = rockets.length - 1; i >= 0; i--) {
+          const r = rockets[i];
+          r.x += r.vx;
+          r.y += r.vy;
+          r.vy += 0.04;
+
+          fCtx.save();
+          fCtx.beginPath();
+          fCtx.arc(r.x, r.y, 2, 0, Math.PI * 2);
+          fCtx.fillStyle = '#ffffff';
+          fCtx.shadowColor = '#0abab5';
+          fCtx.shadowBlur = 10;
+          fCtx.fill();
+          fCtx.restore();
+
+          if (r.vy >= -0.5 || r.y <= r.targetY) {
+            createExplosion(r.x, r.y, r.type);
+            rockets.splice(i, 1);
+          }
+        }
+
         for (let i = particles.length - 1; i >= 0; i--) {
           const p = particles[i];
           p.x += p.vx;
           p.y += p.vy;
-          p.vy += p.gravity;
+          p.vx *= p.drag;
+          p.vy = p.vy * p.drag + p.gravity;
           p.alpha -= p.decay;
 
           if (p.alpha <= 0) {
@@ -1484,42 +1636,138 @@
             fCtx.save();
             fCtx.beginPath();
             fCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            fCtx.fillStyle = p.color.replace('ALP', p.alpha.toFixed(2));
+            fCtx.fillStyle = p.color.replace('ALP', Math.max(0, p.alpha).toFixed(2));
             fCtx.shadowColor = p.glow;
-            fCtx.shadowBlur = 12;
+            fCtx.shadowBlur = p.isWillow ? 8 : 14;
             fCtx.fill();
             fCtx.restore();
           }
         }
+
+        for (let i = confetti.length - 1; i >= 0; i--) {
+          const c = confetti[i];
+          c.x += Math.sin(c.wobble) * 1.2;
+          c.y += c.speedY;
+          c.wobble += c.wobbleSpeed;
+          c.rotation += c.rotSpeed;
+          c.alpha -= c.decay;
+
+          if (c.y > fireworksCanvas.height || c.alpha <= 0) {
+            confetti.splice(i, 1);
+          } else {
+            fCtx.save();
+            fCtx.translate(c.x, c.y);
+            fCtx.rotate(c.rotation);
+            fCtx.fillStyle = c.color.replace('ALP', Math.max(0, c.alpha).toFixed(2));
+            fCtx.fillRect(-c.size / 2, -c.size / 4, c.size, c.size / 2);
+            fCtx.restore();
+          }
+        }
+
         requestAnimationFrame(loop);
       }
       loop();
     }
 
-    function createExplosion(x, y) {
-      const colors = [
+    function launchRocket(targetX, targetY, type = 'peony') {
+      const startX = targetX + (Math.random() * 40 - 20);
+      const startY = fireworksCanvas.height + 10;
+      const vy = -(Math.sqrt(2 * 0.08 * (startY - targetY)) * 0.98);
+      rockets.push({
+        x: startX,
+        y: startY,
+        vx: (targetX - startX) / 35,
+        vy: vy,
+        targetY: targetY,
+        type: type
+      });
+    }
+
+    function createExplosion(x, y, type = 'peony') {
+      skyFlashAlpha = 0.22;
+
+      const tiffanyColors = [
         'rgba(10, 186, 181, ALP)',
         'rgba(56, 189, 248, ALP)',
         'rgba(224, 242, 254, ALP)',
         'rgba(255, 255, 255, ALP)',
         'rgba(147, 197, 253, ALP)'
       ];
-      const count = 55;
+
+      const willowColors = [
+        'rgba(251, 191, 36, ALP)',
+        'rgba(253, 230, 138, ALP)',
+        'rgba(245, 158, 11, ALP)',
+        'rgba(255, 255, 255, ALP)'
+      ];
+
+      if (type === 'willow') {
+        const count = 75;
+        for (let i = 0; i < count; i++) {
+          const angle = (Math.PI * 2 / count) * i + Math.random() * 0.15;
+          const speed = Math.random() * 5.5 + 1.5;
+          particles.push({
+            x: x,
+            y: y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            drag: 0.96,
+            gravity: 0.055,
+            alpha: 1,
+            decay: Math.random() * 0.008 + 0.007,
+            size: Math.random() * 2 + 1,
+            color: willowColors[Math.floor(Math.random() * willowColors.length)],
+            glow: '#fbbf24',
+            isWillow: true
+          });
+        }
+      } else {
+        const count = 65;
+        for (let i = 0; i < count; i++) {
+          const angle = (Math.PI * 2 / count) * i + Math.random() * 0.2;
+          const speed = Math.random() * 6.5 + 2.5;
+          particles.push({
+            x: x,
+            y: y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            drag: 0.95,
+            gravity: 0.045,
+            alpha: 1,
+            decay: Math.random() * 0.016 + 0.01,
+            size: Math.random() * 2.6 + 1.2,
+            color: tiffanyColors[Math.floor(Math.random() * tiffanyColors.length)],
+            glow: '#0abab5',
+            isWillow: false
+          });
+        }
+      }
+
+      spawnConfettiShower(x, y);
+    }
+
+    function spawnConfettiShower(originX, originY) {
+      const count = 22;
+      const confColors = [
+        'rgba(251, 191, 36, ALP)',
+        'rgba(10, 186, 181, ALP)',
+        'rgba(244, 244, 245, ALP)',
+        'rgba(253, 230, 138, ALP)'
+      ];
+
       for (let i = 0; i < count; i++) {
-        const angle = (Math.PI * 2 / count) * i + Math.random() * 0.2;
-        const speed = Math.random() * 6 + 2.5;
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        particles.push({
-          x: x,
-          y: y,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          gravity: 0.08,
+        confetti.push({
+          x: originX + (Math.random() * 120 - 60),
+          y: originY + (Math.random() * 60 - 30),
+          speedY: Math.random() * 1.8 + 0.8,
+          wobble: Math.random() * Math.PI * 2,
+          wobbleSpeed: Math.random() * 0.05 + 0.02,
+          rotation: Math.random() * Math.PI,
+          rotSpeed: Math.random() * 0.04 - 0.02,
+          size: Math.random() * 5 + 3,
+          color: confColors[Math.floor(Math.random() * confColors.length)],
           alpha: 1,
-          decay: Math.random() * 0.015 + 0.01,
-          size: Math.random() * 2.5 + 1.2,
-          color: color,
-          glow: '#0abab5'
+          decay: Math.random() * 0.004 + 0.002
         });
       }
     }
@@ -1527,46 +1775,70 @@
     function triggerGrandFireworks() {
       const w = fireworksCanvas.width;
       const h = fireworksCanvas.height;
-      const shots = [
-        { x: w * 0.25, y: h * 0.35, delay: 0 },
-        { x: w * 0.75, y: h * 0.32, delay: 250 },
-        { x: w * 0.5,  y: h * 0.22, delay: 500 },
-        { x: w * 0.2,  y: h * 0.45, delay: 800 },
-        { x: w * 0.8,  y: h * 0.42, delay: 1100 },
-        { x: w * 0.5,  y: h * 0.3,  delay: 1400 }
+
+      const timeline = [
+        { x: w * 0.3,  y: h * 0.32, delay: 0,    type: 'peony' },
+        { x: w * 0.7,  y: h * 0.28, delay: 350,  type: 'peony' },
+        { x: w * 0.5,  y: h * 0.22, delay: 900,  type: 'willow' },
+        { x: w * 0.22, y: h * 0.38, delay: 1600, type: 'peony' },
+        { x: w * 0.78, y: h * 0.35, delay: 2100, type: 'peony' },
+        { x: w * 0.45, y: h * 0.20, delay: 2800, type: 'willow' },
+        { x: w * 0.55, y: h * 0.25, delay: 3200, type: 'peony' }
       ];
 
-      shots.forEach(s => {
+      timeline.forEach(item => {
         setTimeout(() => {
-          createExplosion(s.x, s.y);
-        }, s.delay);
+          launchRocket(item.x, item.y, item.type);
+        }, item.delay);
       });
     }
 
-    function startMarvelFlipbook() {
-      const photoUrls = CONFIG.scenes.slice(0, 16).map(s => s.photo);
-      let photoIdx = 0;
+    function crossfadeAudio(fromAudio, toAudio, durationMs = 1500) {
+      if (!fromAudio || !toAudio) return;
+      clearInterval(audioFadeInterval);
 
-      // 預設首圖
-      if (marvelGiantTitle) {
-        marvelGiantTitle.style.backgroundImage = `url('${photoUrls[0]}')`;
-      }
-      if (marvelFlipbookTrack) {
-        marvelFlipbookTrack.style.backgroundImage = `url('${photoUrls[0]}')`;
-      }
+      const stepTime = 50;
+      const steps = durationMs / stepTime;
+      let currentStep = 0;
 
-      // 75ms 超高速抽幀循環翻頁
-      flipbookTimer = setInterval(() => {
-        photoIdx = (photoIdx + 1) % photoUrls.length;
-        const currentUrl = photoUrls[photoIdx];
+      toAudio.volume = 0;
+      toAudio.play().catch(e => console.warn('toAudio play err:', e));
 
-        if (marvelGiantTitle) {
-          marvelGiantTitle.style.backgroundImage = `url('${currentUrl}')`;
+      audioFadeInterval = setInterval(() => {
+        currentStep++;
+        const progress = currentStep / steps;
+
+        fromAudio.volume = Math.max(0, 1 - progress);
+        toAudio.volume = Math.min(1, progress);
+
+        if (currentStep >= steps) {
+          clearInterval(audioFadeInterval);
+          fromAudio.pause();
+          fromAudio.volume = 1;
+          toAudio.volume = 1;
         }
-        if (marvelFlipbookTrack) {
-          marvelFlipbookTrack.style.backgroundImage = `url('${currentUrl}')`;
-        }
-      }, 75);
+      }, stepTime);
+    }
+
+    function attemptInstantAudioPlay() {
+      if (!bgAudio) return;
+      bgAudio.volume = 1;
+      const playPromise = bgAudio.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          if (vinylIcon) vinylIcon.classList.add('vinyl-spinning');
+        }).catch(() => {
+          const unlockInstantAudio = () => {
+            bgAudio.play().then(() => {
+              if (vinylIcon) vinylIcon.classList.add('vinyl-spinning');
+            }).catch(() => {});
+            window.removeEventListener('click', unlockInstantAudio, { capture: true });
+            window.removeEventListener('touchstart', unlockInstantAudio, { capture: true });
+          };
+          window.addEventListener('click', unlockInstantAudio, { capture: true, once: true });
+          window.addEventListener('touchstart', unlockInstantAudio, { capture: true, once: true });
+        });
+      }
     }
 
     function initInteractions() {
@@ -1601,28 +1873,25 @@
 
       musicToggleBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (bgAudio.paused) {
-          bgAudio.play().then(() => {
+        const activeAudio = (CONFIG.scenes[currentIndex] && CONFIG.scenes[currentIndex].type === 'finale') ? birthdayAudio : bgAudio;
+        if (activeAudio.paused) {
+          activeAudio.play().then(() => {
             vinylIcon.classList.add('vinyl-spinning');
           }).catch(() => {});
         } else {
-          bgAudio.pause();
+          activeAudio.pause();
           vinylIcon.classList.remove('vinyl-spinning');
         }
       });
 
       startCinemaBtn.addEventListener('click', () => {
-        // 清理抽幀定時器以釋放行動裝置運算資源
-        if (flipbookTimer) {
-          clearInterval(flipbookTimer);
-          flipbookTimer = null;
+        if (bgAudio.paused) {
+          bgAudio.play().then(() => {
+            if (vinylIcon) vinylIcon.classList.add('vinyl-spinning');
+          }).catch(err => {
+            console.warn('Audio auto-play blocked by system:', err);
+          });
         }
-
-        bgAudio.play().then(() => {
-          vinylIcon.classList.add('vinyl-spinning');
-        }).catch(err => {
-          console.warn('Audio auto-play blocked by system:', err);
-        });
 
         introCurtain.style.opacity = '0';
         setTimeout(() => {
@@ -1635,8 +1904,9 @@
       initScenes();
       initStars();
       initFireworksCanvas();
+      initFoxSearchlights();
       initInteractions();
-      startMarvelFlipbook();
+      attemptInstantAudioPlay();
     });
   </script>
 </body>
