@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>佳寶寶 · 生日快樂 ✦ Happy Birthday</title>
   
-  <!-- iOS PWA 獨立全螢幕 APP 沉浸配置 -->
+  <!-- iOS PWA 獨立全螢幕沉浸配置 -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="佳寶寶">
@@ -61,7 +61,7 @@
       text-orientation: mixed;
     }
 
-    /* 電影舞台轉場動態 */
+    /* 電影舞台推軌轉場（景深視差 Dolly Track） */
     .cinema-stage {
       position: absolute;
       inset: 0;
@@ -76,14 +76,14 @@
     .scene-active {
       opacity: 1 !important;
       visibility: visible !important;
-      transform: translate3d(0, 0, 0) !important;
+      transform: translate3d(0, 0, 0) scale(1) !important;
       z-index: 20;
     }
 
-    .exit-zoom-out { opacity: 0 !important; transform: translate3d(0, 0, 0) !important; }
-    .exit-slide-left { opacity: 0 !important; transform: translate3d(-4%, 0, 0) !important; }
-    .enter-zoom-in { opacity: 0; transform: translate3d(0, 0, 0); }
-    .enter-slide-right { transform: translate3d(4%, 0, 0); }
+    .exit-zoom-out { opacity: 0 !important; transform: translate3d(8%, 0, 0) scale(0.95) !important; }
+    .exit-slide-left { opacity: 0 !important; transform: translate3d(-8%, 0, 0) scale(0.95) !important; }
+    .enter-zoom-in { opacity: 0; transform: translate3d(-8%, 0, 0) scale(1.05); }
+    .enter-slide-right { transform: translate3d(8%, 0, 0) scale(1.05); }
 
     /* 燭火真實呼吸動態 */
     @keyframes flameFlicker {
@@ -235,13 +235,14 @@
       box-shadow: 0 4px 18px rgba(0, 0, 0, 0.85), inset 0 0 10px rgba(0, 0, 0, 0.7);
     }
 
+    /* 暗房顯影溶解動態（Blur 8px -> 0px） */
     @keyframes darkroomEnter {
-      0% { opacity: 0; transform: scale(0.95); filter: blur(4px); }
-      100% { opacity: 1; transform: scale(1); filter: blur(0px); }
+      0% { opacity: 0; transform: scale(0.96) translateY(10px); filter: blur(8px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0px); }
     }
 
     .darkroom-active-enter {
-      animation: darkroomEnter 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: darkroomEnter 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     @keyframes beaconGlow {
@@ -287,8 +288,8 @@
   <canvas id="starsCanvas" class="absolute inset-0 w-full h-full pointer-events-none z-10"></canvas>
   <canvas id="fireworksCanvas" class="absolute inset-0 w-full h-full pointer-events-none z-40"></canvas>
 
-  <!-- 電影高光過曝溶鏡 (Bloom Flash) -->
-  <div id="bloomFlash" class="fixed inset-0 bg-[#ffffff] pointer-events-none z-[90] opacity-0 transition-opacity duration-600"></div>
+  <!-- 電影高光過曝溶鏡（金琥珀暗香檳光暈，消除生硬刺眼純白） -->
+  <div id="bloomFlash" class="fixed inset-0 bg-gradient-to-b from-[#fef3c7] via-[#fde68a] to-[#d97706] pointer-events-none z-[90] opacity-0 transition-opacity duration-700"></div>
 
   <!-- 開場布幕：好萊塢 3D 影片播放層與特映驗票門票 -->
   <div id="introCurtain" class="fixed inset-0 z-50 flex flex-col items-center justify-between bg-[#030712] text-center overflow-hidden safe-top-inset safe-bottom-inset transition-opacity duration-700">
@@ -387,7 +388,7 @@
   <!-- 電影舞台容器 -->
   <main id="cinematicStage" class="relative w-full h-full overflow-hidden"></main>
 
-  <!-- 點擊切換熱區 (第 1~16 幕生效) -->
+  <!-- 點擊切換熱區 (第 1~16 幕生效，第 17 幕由 JS 動態管理) -->
   <div id="tapPrevZone" class="absolute left-0 top-16 bottom-16 w-[30%] z-20"></div>
   <div id="tapNextZone" class="absolute right-0 top-16 bottom-16 w-[70%] z-20"></div>
 
@@ -623,6 +624,21 @@
     let candleBlown = false;
     let audioFadeInterval = null;
     let videoCompleted = false;
+
+    // 智能預載快取
+    const preloadedImages = new Set();
+    function preloadAdjacentPhotos(idx) {
+      [idx + 1, idx - 1].forEach(targetIdx => {
+        if (targetIdx >= 0 && targetIdx < CONFIG.scenes.length) {
+          const sc = CONFIG.scenes[targetIdx];
+          if (sc && sc.photo && !preloadedImages.has(sc.photo)) {
+            const img = new Image();
+            img.src = sc.photo;
+            preloadedImages.add(sc.photo);
+          }
+        }
+      });
+    }
 
     function renderCustomTypography(scene, index) {
       const tag = scene.tag || '';
@@ -904,6 +920,11 @@
                 <p class="text-xs md:text-sm text-slate-100/90 leading-relaxed tracking-wide watermark-text">
                   ${letter}
                 </p>
+                <!-- 終章儀式門檻轉場提示 -->
+                <div class="mt-3 flex items-center gap-1.5 text-[9.5px] font-sans-modern tracking-widest text-amber-300/85 animate-pulse">
+                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                  <span>向右滑動 · 揭曉生日壓軸 ✦</span>
+                </div>
               </div>
             </div>`;
 
@@ -1203,6 +1224,7 @@
       });
 
       updateDynamicTheme(0);
+      preloadAdjacentPhotos(0);
     }
 
     function updateDynamicTheme(index) {
@@ -1249,9 +1271,11 @@
 
       const tapPrevZone = document.getElementById('tapPrevZone');
       const tapNextZone = document.getElementById('tapNextZone');
+
+      // 終章熱區防誤觸管理：蛋糕未吹熄前保留左側點擊/滑動回退
       if (CONFIG.scenes[nextIndex].type === 'finale') {
-        if (tapPrevZone) tapPrevZone.style.display = 'none';
         if (tapNextZone) tapNextZone.style.display = 'none';
+        if (tapPrevZone) tapPrevZone.style.display = candleBlown ? 'none' : 'block';
       } else {
         if (tapPrevZone) tapPrevZone.style.display = 'block';
         if (tapNextZone) tapNextZone.style.display = 'block';
@@ -1270,6 +1294,7 @@
       });
 
       updateDynamicTheme(nextIndex);
+      preloadAdjacentPhotos(nextIndex);
 
       if (CONFIG.scenes[nextIndex].type === 'finale') {
         crossfadeAudio(bgAudio, birthdayAudio, 1500);
@@ -1303,6 +1328,10 @@
         if (candleBlown) return;
         candleBlown = true;
 
+        // 吹熄後鎖定回退
+        const tapPrevZone = document.getElementById('tapPrevZone');
+        if (tapPrevZone) tapPrevZone.style.display = 'none';
+
         if (candleFlame) {
           candleFlame.style.opacity = '0';
           candleFlame.style.transform = 'scale(0)';
@@ -1313,13 +1342,22 @@
           smokeWisp.classList.add('smoke-vanish');
         }
 
+        // 金琥珀微光溶鏡
         if (bloomFlash) {
-          bloomFlash.style.opacity = '0.95';
+          bloomFlash.style.opacity = '0.9';
           setTimeout(() => {
             bloomFlash.style.opacity = '0';
-          }, 650);
+          }, 700);
         }
 
+        // 蛋糕平滑沉降淡出
+        if (cakeStageView) {
+          cakeStageView.style.transition = 'opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)';
+          cakeStageView.style.opacity = '0';
+          cakeStageView.style.transform = 'translate3d(0, 45px, 0) scale(0.96)';
+        }
+
+        // 底片暗房顯影浮現（Blur 8px ➔ 0px）
         setTimeout(() => {
           if (cakeStageView) cakeStageView.style.display = 'none';
           if (grandDarkroomStage) {
@@ -1330,7 +1368,7 @@
           triggerGrandFireworks();
           setTimeout(() => triggerGrandFireworks(), 1500);
           setTimeout(() => triggerGrandFireworks(), 3000);
-        }, 380);
+        }, 450);
       };
 
       ['click', 'touchstart', 'pointerdown'].forEach(evtType => {
@@ -1631,21 +1669,26 @@
       if (videoCompleted) return;
       videoCompleted = true;
 
-      // 影片暫停
       if (introVideo) {
         introVideo.pause();
       }
 
-      // 白光過曝溶鏡 (Bloom Flash)
+      // 金琥珀暖光溶鏡過渡
       if (bloomFlash) {
-        bloomFlash.style.opacity = '1';
+        bloomFlash.style.opacity = '0.9';
       }
 
-      // 啟動 BGM 配樂
+      // BGM 漸強淡入（0.8 秒平滑增至 100% 音量）
       if (bgAudio) {
-        bgAudio.volume = 1;
+        bgAudio.volume = 0;
         bgAudio.play().then(() => {
           if (vinylIcon) vinylIcon.classList.add('vinyl-spinning');
+          let currentVol = 0;
+          const fadeInterval = setInterval(() => {
+            currentVol = Math.min(1, currentVol + 0.08);
+            bgAudio.volume = currentVol;
+            if (currentVol >= 1) clearInterval(fadeInterval);
+          }, 60);
         }).catch(err => console.warn('bgAudio start failed:', err));
       }
 
@@ -1685,9 +1728,18 @@
 
         if (Math.abs(diffX) > 45 && Math.abs(diffX) > Math.abs(diffY)) {
           if (diffX < 0) {
-            switchScene(currentIndex + 1);
+            // 向左滑動（下一幕）
+            if (currentIndex < CONFIG.scenes.length - 1) {
+              switchScene(currentIndex + 1);
+            }
           } else {
-            switchScene(currentIndex - 1);
+            // 向右滑動（上一幕）
+            // 在第 17 幕且尚未吹熄蠟燭時，允許安全回退至第 16 幕
+            if (currentIndex === 16 && !candleBlown) {
+              switchScene(15);
+            } else if (currentIndex > 0 && currentIndex < 16) {
+              switchScene(currentIndex - 1);
+            }
           }
         }
       }, { passive: true });
@@ -1707,14 +1759,12 @@
 
       // 點擊特映門票入場：啟動影片播放
       startCinemaBtn.addEventListener('click', () => {
-        // 隱藏封面
         ticketCoverView.style.opacity = '0';
         setTimeout(() => {
           ticketCoverView.style.display = 'none';
           videoContainer.style.opacity = '1';
           videoContainer.style.pointerEvents = 'auto';
 
-          // 啟動 intro.mp4 影片播放 (帶聲音)
           introVideo.currentTime = 0;
           introVideo.play().catch(err => {
             console.warn('Video auto-play restricted, jumping directly:', err);
