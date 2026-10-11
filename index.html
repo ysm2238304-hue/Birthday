@@ -296,7 +296,6 @@
                class="w-[145%] h-[145%] object-cover blur-[55px] opacity-75 scale-110 pointer-events-none select-none">
           <source src="./intro.mp4" type="video/mp4">
         </video>
-        <!-- 微妙的上下暗黑微光遮罩，消除光暈生硬邊緣 -->
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/80 pointer-events-none"></div>
       </div>
 
@@ -1223,7 +1222,7 @@
                 <span class="w-8 h-[1px] bg-gradient-to-l from-transparent to-amber-300/80"></span>
               </div>
 
-              <!-- ✦ 中央黃金視覺核心：3 拍遞進顯影專屬告白 ✦ -->
+              <!-- ✦ 中央黃金視覺核心：4 拍遞進顯影專屬告白 ✦ -->
               <div class="relative z-20 my-auto flex flex-col items-center text-center max-w-sm md:max-w-md space-y-6">
                 
                 <!-- 第一拍 -->
@@ -1242,6 +1241,19 @@
                     佳寶寶，生日快樂！<br/>往後每一年我都想陪著妳。
                   </h2>
                 </div>
+
+                <!-- ✦ 第四拍：手寫情書專屬階梯落款 (右偏縮排排版) ✦ -->
+                <div id="dedicationLine4" class="dedication-line w-full flex justify-end pr-3 md:pr-6 pt-3 font-serif select-none pointer-events-none">
+                  <div class="flex flex-col items-start text-left">
+                    <div class="text-xs md:text-sm text-slate-300/85 tracking-[0.25em] watermark-subtle">
+                      永遠最愛妳的
+                    </div>
+                    <div class="text-sm md:text-base font-bold text-amber-200 tracking-[0.3em] pl-6 md:pl-8 mt-1.5 watermark-text drop-shadow-[0_2px_12px_rgba(245,158,11,0.6)]">
+                      黑糖饅頭
+                    </div>
+                  </div>
+                </div>
+
               </div>
 
               <!-- 底部膠卷封印戳記與重溫按鈕 -->
@@ -1291,7 +1303,7 @@
         }
       });
 
-      // ✦ 關鍵防撞控制：第 17 幕時，隱藏 SCENE 標籤與進度條，回退時無縫復原
+      // ✦ 第 17 幕智慧純淨導覽：隱藏 SCENE 標籤與進度條，回退前幕時自動復原
       if (index === 16) {
         sceneBadge.style.opacity = '0';
         sceneBadge.style.visibility = 'hidden';
@@ -1394,6 +1406,7 @@
       const dedicationLine1 = document.getElementById('dedicationLine1');
       const dedicationLine2 = document.getElementById('dedicationLine2');
       const dedicationLine3 = document.getElementById('dedicationLine3');
+      const dedicationLine4 = document.getElementById('dedicationLine4');
       const epilogueFooterBlock = document.getElementById('epilogueFooterBlock');
       const replayFinaleBtn = document.getElementById('replayFinaleBtn');
 
@@ -1471,7 +1484,7 @@
 
       }, 19800));
 
-      // ✦ 三拍遞進顯影 ✦
+      // ✦ 四拍遞進顯影 ✦
       // 第一拍：第 21.0 秒
       taitungTimeouts.push(setTimeout(() => {
         if (dedicationLine1) dedicationLine1.classList.add('dedication-line-show');
@@ -1487,10 +1500,15 @@
         if (dedicationLine3) dedicationLine3.classList.add('dedication-line-show');
       }, 24500));
 
-      // 戳記與重溫按鈕顯影：第 26.0 秒
+      // ✦ 第四拍：第 26.2 秒 (手寫信專屬落款：永遠最愛妳的 / 黑糖饅頭) ✦
+      taitungTimeouts.push(setTimeout(() => {
+        if (dedicationLine4) dedicationLine4.classList.add('dedication-line-show');
+      }, 26200));
+
+      // 戳記與重溫按鈕顯影：第 27.8 秒
       taitungTimeouts.push(setTimeout(() => {
         if (epilogueFooterBlock) epilogueFooterBlock.classList.add('dedication-line-show');
-      }, 26000));
+      }, 27800));
 
       if (replayFinaleBtn) {
         replayFinaleBtn.onclick = () => {
