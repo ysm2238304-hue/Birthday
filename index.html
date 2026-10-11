@@ -364,17 +364,17 @@
     </div>
   </div>
 
-  <!-- 頂部進度條與導覽列 -->
-  <div id="topNavigationBar" class="fixed top-0 inset-x-0 z-30 flex flex-col safe-top-inset px-4 pointer-events-none transition-opacity duration-700">
-    <div id="timelineProgressTrack" class="flex gap-1 w-full pt-2"></div>
+  <!-- 頂部進度條與導覽列 (精準計算安全層次，保證不遮擋標題) -->
+  <div id="topNavigationBar" class="fixed top-0 inset-x-0 z-40 flex flex-col safe-top-inset px-4 pointer-events-none transition-opacity duration-700">
+    <div id="timelineProgressTrack" class="flex gap-1 w-full pt-1.5 transition-opacity duration-500"></div>
 
-    <div class="flex items-center justify-between mt-2.5 px-0.5">
-      <div id="sceneBadge" class="text-[11px] font-sans-modern tracking-widest font-medium watermark-subtle transition-colors duration-700">
+    <div class="flex items-center justify-between mt-2 px-0.5">
+      <div id="sceneBadge" class="text-[11px] font-sans-modern tracking-widest font-medium watermark-subtle transition-all duration-500">
         SCENE 01 / 17
       </div>
 
-      <!-- 音樂開關按鈕 -->
-      <button id="musicToggleBtn" class="pointer-events-auto flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900/60 backdrop-blur-md border border-white/20 text-white active:scale-95 transition-all">
+      <!-- 音樂開關按鈕 (獨立安全頂層) -->
+      <button id="musicToggleBtn" class="pointer-events-auto flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900/70 backdrop-blur-md border border-white/20 text-white active:scale-95 transition-all shadow-md">
         <div id="vinylIcon" class="w-3.5 h-3.5 rounded-full border border-teal-300/70 flex items-center justify-center vinyl-spinning">
           <div id="vinylCenter" class="w-1 h-1 rounded-full bg-teal-300"></div>
         </div>
@@ -987,7 +987,7 @@
             ${renderCustomTypography(scene, index)}
           `;
         } else {
-          // 第 17 幕：大蛋糕 ➔ 台東真實煙火 ➔ 電影終章黑幕告白
+          // 第 17 幕：大蛋糕 ➔ 頂部完全避讓動態島與 BGM ➔ 台東真實煙火 ➔ 電影終章黑幕
           const singleReelHTML = CONFIG.scenes.slice(0, 16).map((item, photoIdx) => `
             <div class="film-frame-card">
               <div class="flex justify-between px-1 opacity-80">
@@ -1020,15 +1020,15 @@
               <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(10,186,181,0.25)_0%,_transparent_75%)]"></div>
             </div>
 
-            <!-- 第一階段：法式原色大蛋糕許願舞台 -->
-            <div id="cakeStageView" class="relative z-30 w-full h-full flex flex-col items-center justify-between text-center px-4 safe-top-inset safe-bottom-inset pt-16 pb-4 transition-all duration-700">
+            <!-- 第一階段：法式原色大蛋糕許願舞台 (精準向下避讓動態島與頂部導覽列，安全裕度 100%) -->
+            <div id="cakeStageView" class="relative z-30 w-full h-full flex flex-col items-center justify-between text-center px-4 safe-bottom-inset pt-[calc(env(safe-area-inset-top,44px)+3.8rem)] pb-4 transition-all duration-700">
               
-              <div class="flex flex-col items-center max-w-sm">
-                <div class="text-teal-300 text-[10px] md:text-xs font-sans-modern tracking-[0.35em] uppercase mb-1 watermark-subtle font-semibold">
+              <div class="flex flex-col items-center max-w-sm px-4">
+                <div class="text-teal-300 text-[10px] md:text-xs font-sans-modern tracking-[0.35em] uppercase mb-1.5 watermark-subtle font-semibold">
                   ✦ GRAND FINALE · CURTAIN CALL ✦
                 </div>
                 
-                <h2 class="text-2xl md:text-4xl font-black text-white tracking-widest mb-1 drop-shadow-[0_4px_25px_rgba(255,255,255,0.9)]">
+                <h2 class="text-2xl md:text-3xl font-black text-white tracking-widest mb-1.5 drop-shadow-[0_4px_25px_rgba(255,255,255,0.9)] leading-tight">
                   我最愛的 寶寶佳 · 生日快樂
                 </h2>
                 
@@ -1036,7 +1036,7 @@
                   🎂 生日快樂 ✦ Happy Birthday 🎂
                 </div>
 
-                <div class="text-[10px] md:text-[11px] text-teal-100/75 tracking-wider flex items-center gap-2 watermark-subtle">
+                <div class="text-[9.5px] md:text-[11px] text-teal-100/75 tracking-wider flex items-center gap-2 watermark-subtle">
                   <span>主演：佳寶寶</span>
                   <span>·</span>
                   <span>掌鏡與同行：我</span>
@@ -1062,9 +1062,10 @@
                     <div class="absolute inset-1.5 rounded-full bg-white/95 blur-[1px]"></div>
                   </div>
 
+                  <!-- 零延遲即時手勢觸發熱區 (綁定 Touchstart/Pointerdown) -->
                   <button id="flameHitbox" 
                           aria-label="吹熄蠟燭許願" 
-                          class="absolute -inset-5 z-[70] w-20 h-20 rounded-full cursor-pointer bg-transparent border-0 outline-none active:scale-95 touch-manipulation"></button>
+                          class="absolute -inset-6 z-[70] w-24 h-24 rounded-full cursor-pointer bg-transparent border-0 outline-none active:scale-95 touch-manipulation"></button>
                 </div>
 
                 <div class="w-3 h-10 bg-gradient-to-r from-amber-100 via-white to-amber-200 rounded-t-sm shadow-md border-x border-amber-300/40 relative z-30 pointer-events-none"></div>
@@ -1136,8 +1137,8 @@
               </div>
             </div>
 
-            <!-- 第二階段：【好萊塢導演剪輯 · 頂部天際煙火 + 中下段 35mm 典藏膠卷劇照】 -->
-            <div id="taitungFinaleStage" class="hidden absolute inset-0 z-40 w-full h-full overflow-hidden flex flex-col justify-between opacity-0 transition-opacity duration-1000">
+            <!-- 第二階段：【好萊塢導演剪輯 · 頂部天際煙火 + 中下段 35mm 典藏膠卷劇照】 (常駐 DOM 預載，消除硬體解碼黑屏) -->
+            <div id="taitungFinaleStage" class="absolute inset-0 z-40 w-full h-full overflow-hidden flex flex-col justify-between opacity-0 pointer-events-none transition-opacity duration-700 will-change-[opacity]">
               
               <!-- 底層：全螢幕播放 20 秒台東煙火影片 (直向縱深完美釋放原聲) -->
               <div class="absolute inset-0 w-full h-full z-0 overflow-hidden bg-black">
@@ -1288,8 +1289,16 @@
         }
       });
 
-      sceneBadge.textContent = `SCENE ${String(index + 1).padStart(2, '0')} / ${String(CONFIG.scenes.length).padStart(2, '0')}`;
-      sceneBadge.style.color = accent;
+      // ✦ 關鍵防撞修復：進入第 17 幕時，隱藏 SCENE 17 / 17，頂部進度條微暗化，避免與生日快樂標題打架
+      if (index === 16) {
+        sceneBadge.style.opacity = '0';
+        timelineTrack.style.opacity = '0.3';
+      } else {
+        sceneBadge.style.opacity = '1';
+        timelineTrack.style.opacity = '1';
+        sceneBadge.textContent = `SCENE ${String(index + 1).padStart(2, '0')} / ${String(CONFIG.scenes.length).padStart(2, '0')}`;
+        sceneBadge.style.color = accent;
+      }
 
       if (vinylCenter) vinylCenter.style.backgroundColor = accent;
       if (vinylIcon) vinylIcon.style.borderColor = accent;
@@ -1333,6 +1342,11 @@
 
       if (CONFIG.scenes[nextIndex].type === 'finale') {
         bindCandleEvent();
+        // 預熱煙火影片硬體資源
+        const taitungVideo = document.getElementById('taitungVideo');
+        if (taitungVideo) {
+          taitungVideo.load();
+        }
       }
 
       currentIndex = nextIndex;
@@ -1368,7 +1382,7 @@
       taitungTimeouts = [];
     }
 
-    function startTaitungTimeline() {
+    function startTaitungTimeline(alreadyPlaying = false) {
       clearTaitungTimeline();
       const taitungVideo = document.getElementById('taitungVideo');
       const taitungVideoDimmer = document.getElementById('taitungVideoDimmer');
@@ -1382,21 +1396,15 @@
 
       // 煙火爆發時，徹底淡出頂部導覽列，整片 iOS 頂部天際線 100% 留給煙火
       if (topNavigationBar) {
-        topNavigationBar.style.transition = 'opacity 0.6s ease';
+        topNavigationBar.style.transition = 'opacity 0.5s ease';
         topNavigationBar.style.opacity = '0';
       }
 
-      if (taitungVideo) {
+      // 如果未同步起播，啟動煙火解碼
+      if (!alreadyPlaying && taitungVideo) {
         taitungVideo.currentTime = 0;
-        taitungVideo.volume = 0;
-        taitungVideo.play().then(() => {
-          let vVol = 0;
-          const vFade = setInterval(() => {
-            vVol = Math.min(1, vVol + 0.18);
-            taitungVideo.volume = vVol;
-            if (vVol >= 1) clearInterval(vFade);
-          }, 35);
-        }).catch(e => console.warn('Taitung video play:', e));
+        taitungVideo.volume = 1;
+        taitungVideo.play().catch(e => console.warn('Taitung video play:', e));
       }
 
       // [ 0.0s ~ 3.5s ] 純淨煙火，頂部天際線毫無遮擋
@@ -1455,22 +1463,18 @@
       }, 19800));
 
       // ✦ 三拍遞進顯影 ✦
-      // 第一拍：第 21.0 秒
       taitungTimeouts.push(setTimeout(() => {
         if (dedicationLine1) dedicationLine1.classList.add('dedication-line-show');
       }, 21000));
 
-      // 第二拍：第 22.8 秒
       taitungTimeouts.push(setTimeout(() => {
         if (dedicationLine2) dedicationLine2.classList.add('dedication-line-show');
       }, 22800));
 
-      // 第三拍：第 24.5 秒 (金色呼吸光暈壓軸)
       taitungTimeouts.push(setTimeout(() => {
         if (dedicationLine3) dedicationLine3.classList.add('dedication-line-show');
       }, 24500));
 
-      // 戳記與重溫按鈕顯影：第 26.0 秒
       taitungTimeouts.push(setTimeout(() => {
         if (epilogueFooterBlock) epilogueFooterBlock.classList.add('dedication-line-show');
       }, 26000));
@@ -1509,6 +1513,7 @@
       const bloomFlash = document.getElementById('bloomFlash');
       const cakeStageView = document.getElementById('cakeStageView');
       const taitungFinaleStage = document.getElementById('taitungFinaleStage');
+      const taitungVideo = document.getElementById('taitungVideo');
 
       if (!flameHitbox || candleBlown) return;
 
@@ -1523,6 +1528,17 @@
         const tapPrevZone = document.getElementById('tapPrevZone');
         if (tapPrevZone) tapPrevZone.style.display = 'none';
 
+        // ✦ 1. 核心修復：在原生觸控手勢執行緒內部立即同步觸發 play()，激活 iOS 硬體解碼，徹底消除延遲與掉幀
+        if (taitungVideo) {
+          taitungVideo.currentTime = 0;
+          taitungVideo.volume = 1;
+          const playPromise = taitungVideo.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(err => console.warn('Taitung video synchronous play:', err));
+          }
+        }
+
+        // 2. 燭火熄滅與白煙動態
         if (candleFlame) {
           candleFlame.style.opacity = '0';
           candleFlame.style.transform = 'scale(0)';
@@ -1533,45 +1549,50 @@
           smokeWisp.classList.add('smoke-vanish');
         }
 
-        // 吹熄瞬間，主配樂平滑淡出 (0.5s)，讓位給台東煙火原聲
+        // 3. 鋼琴音樂在 300ms 內平滑指數淡出，為煙火原聲讓路
         if (bgAudio && !bgAudio.paused) {
           let bVol = bgAudio.volume;
           const bFadeOut = setInterval(() => {
-            bVol = Math.max(0, bVol - 0.12);
+            bVol = Math.max(0, bVol - 0.18);
             bgAudio.volume = bVol;
             if (bVol <= 0) {
               clearInterval(bFadeOut);
               bgAudio.pause();
             }
-          }, 40);
+          }, 35);
         }
 
+        // 4. 金琥珀微光溶鏡
         if (bloomFlash) {
-          bloomFlash.style.opacity = '0.9';
+          bloomFlash.style.opacity = '0.85';
           setTimeout(() => {
             bloomFlash.style.opacity = '0';
-          }, 700);
+          }, 600);
         }
 
+        // 5. 蛋糕平滑沉降融出，底層煙火舞台即刻浮現（GPU 硬體加速）
         if (cakeStageView) {
-          cakeStageView.style.transition = 'opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)';
+          cakeStageView.style.transition = 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
           cakeStageView.style.opacity = '0';
-          cakeStageView.style.transform = 'translate3d(0, 45px, 0) scale(0.96)';
+          cakeStageView.style.transform = 'translate3d(0, 35px, 0) scale(0.96)';
         }
+
+        if (taitungFinaleStage) {
+          taitungFinaleStage.style.pointerEvents = 'auto';
+          taitungFinaleStage.classList.remove('opacity-0');
+          taitungFinaleStage.classList.add('opacity-100');
+        }
+
+        // 6. 啟動照片時間軸，傳入 true 代表影片已經同步起播
+        startTaitungTimeline(true);
 
         setTimeout(() => {
           if (cakeStageView) cakeStageView.style.display = 'none';
-          if (taitungFinaleStage) {
-            taitungFinaleStage.classList.remove('hidden');
-            void taitungFinaleStage.offsetWidth;
-            taitungFinaleStage.classList.remove('opacity-0');
-            taitungFinaleStage.classList.add('opacity-100');
-            startTaitungTimeline();
-          }
-        }, 450);
+        }, 650);
       };
 
-      ['click', 'touchstart', 'pointerdown'].forEach(evtType => {
+      // 監聽最快速的 touchstart 與 pointerdown 手勢，實現真正的零延遲反應
+      ['touchstart', 'pointerdown', 'click'].forEach(evtType => {
         flameHitbox.addEventListener(evtType, handleFlameExtinguish, { passive: false });
       });
     }
@@ -1621,16 +1642,10 @@
       if (videoCompleted) return;
       videoCompleted = true;
 
-      if (introVideo) {
-        introVideo.pause();
-      }
-      if (introVideoAmbient) {
-        introVideoAmbient.pause();
-      }
+      if (introVideo) introVideo.pause();
+      if (introVideoAmbient) introVideoAmbient.pause();
 
-      if (bloomFlash) {
-        bloomFlash.style.opacity = '0.9';
-      }
+      if (bloomFlash) bloomFlash.style.opacity = '0.9';
 
       if (bgAudio) {
         bgAudio.volume = 0;
@@ -1650,9 +1665,7 @@
           introCurtain.style.opacity = '0';
           setTimeout(() => {
             introCurtain.style.display = 'none';
-            if (bloomFlash) {
-              bloomFlash.style.opacity = '0';
-            }
+            if (bloomFlash) bloomFlash.style.opacity = '0';
           }, 500);
         }
       }, 350);
